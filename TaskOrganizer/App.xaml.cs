@@ -79,6 +79,7 @@ public partial class App : Application
         services.AddSingleton<IRappelRepository, RappelRepository>();
         services.AddSingleton<IRappelService, RappelService>();
         services.AddSingleton<INotificationService, ToastNotificationService>();
+        services.AddSingleton<IPlanningService, PlanningService>();
         services.AddSingleton<IDialogService, DialogService>();
         services.AddSingleton<RappelBackgroundService>();
 
