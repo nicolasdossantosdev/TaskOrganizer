@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  build-and-test:
+    # WPF ne cible que Windows : impossible de builder/tester sur ubuntu-latest.
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Installer .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restaurer les dépendances
+        run: dotnet restore TaskOrganizer.slnx
+
+      - name: Builder la solution
+        run: dotnet build TaskOrganizer.slnx --no-restore --configuration Release
+
+      - name: Exécuter les tests
+        run: dotnet test TaskOrganizer.slnx --no-build --configuration Release --logger "trx;LogFileName=test-results.trx"
+
+      - name: Publier les résultats de tests
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: '**/TestResults/*.trx'
