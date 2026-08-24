@@ -1,5 +1,6 @@
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Animation;
 using TaskOrganizer.Models;
 using TaskOrganizer.ViewModels;
 
@@ -11,6 +12,22 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
         DataContext = viewModel;
+    }
+
+    /// <summary>
+    /// SelectionChanged remonte (bubbling) depuis n'importe quel Selector des
+    /// onglets (ComboBox de tri, de thème, etc.) : on ne réagit qu'à un
+    /// changement d'onglet, identifié par e.Source pointant sur le TabControl
+    /// lui-même plutôt que sur un contrôle imbriqué.
+    /// </summary>
+    private void OngletsPrincipaux_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (e.Source is not TabControl tabControl)
+        {
+            return;
+        }
+
+        tabControl.BeginAnimation(OpacityProperty, new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(200)));
     }
 
     /// <summary>

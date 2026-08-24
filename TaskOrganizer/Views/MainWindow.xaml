@@ -12,7 +12,7 @@
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
     </Window.Resources>
-    <TabControl Margin="16">
+    <TabControl x:Name="OngletsPrincipaux" Margin="16" SelectionChanged="OngletsPrincipaux_SelectionChanged">
         <TabItem>
             <TabItem.Header>
                 <StackPanel Orientation="Horizontal">
@@ -106,6 +106,19 @@
 
         <!-- Liste des tâches -->
         <DataGrid Grid.Row="2" ItemsSource="{Binding TachesAffichees}" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False">
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Style.Triggers>
+                        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.25" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Titre" Binding="{Binding Titre}" Width="2*" />
                 <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="2.5*" />
