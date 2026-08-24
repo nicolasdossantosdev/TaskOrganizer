@@ -1,3 +1,4 @@
+using TaskOrganizer.Data;
 using TaskOrganizer.Models;
 using TaskOrganizer.Services;
 
@@ -6,6 +7,9 @@ namespace TaskOrganizer.Tests.Fakes;
 internal sealed class FakeTacheService : ITacheService
 {
     public List<Tache> Taches { get; } = new();
+
+    /// <summary>Si renseigné, ModifierAsync lève cette exception au lieu de persister.</summary>
+    public PersistanceException? ExceptionSurModifier { get; set; }
 
     public Task<IReadOnlyList<Tache>> ObtenirToutesAsync(CancellationToken cancellationToken = default)
         => Task.FromResult<IReadOnlyList<Tache>>(Taches);
@@ -22,6 +26,11 @@ internal sealed class FakeTacheService : ITacheService
 
     public Task ModifierAsync(Tache tache, CancellationToken cancellationToken = default)
     {
+        if (ExceptionSurModifier is not null)
+        {
+            throw ExceptionSurModifier;
+        }
+
         var index = Taches.FindIndex(t => t.Id == tache.Id);
         if (index >= 0)
         {
