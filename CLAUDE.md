@@ -27,37 +27,40 @@ Telegram bot / Firebase Cloud Messaging), synchronisation cloud, multi-utilisate
 
 ## Architecture / structure de dossiers
 
+Solution à 2 projets : une application WPF unique organisée par dossiers, et
+un projet de tests séparé. Pas de multi-projet par couche (Core/Data/...) :
+la séparation des responsabilités se fait par dossier et par convention de
+dépendance, pas par assembly.
+
 ```
 TaskOrganizer.slnx
 CLAUDE.md
 README.md
-src/
-  TaskOrganizer.App/         WPF, exécutable, composition root (DI + App.xaml)
-  TaskOrganizer.Core/        Entités, enums, interfaces (repositories/services). Aucune dépendance externe.
-  TaskOrganizer.Data/        EF Core : DbContext, Migrations, implémentations des repositories.
-  TaskOrganizer.Services/    Logique applicative (orchestration, futurs rappels/notifications).
-  TaskOrganizer.ViewModels/  ViewModels MVVM (CommunityToolkit.Mvvm).
-  TaskOrganizer.Views/       Fenêtres/UserControls XAML. Pas de logique métier dans le code-behind.
-tests/
-  TaskOrganizer.Tests/       Tests xUnit (Repositories, Services, ViewModels).
+TaskOrganizer/              WPF, exécutable, composition root (DI + App.xaml)
+  App.xaml / App.xaml.cs    Point d'entrée, construction du ServiceProvider (DI).
+  Models/                   Entités et enums du domaine (Tache, PrioriteTache, StatutTache).
+  Data/                     EF Core : AppDbContext, Migrations, ITacheRepository + implémentation.
+  Services/                 Logique applicative (orchestration, futurs rappels/notifications).
+  ViewModels/               ViewModels MVVM (CommunityToolkit.Mvvm).
+  Views/                    Fenêtres/UserControls XAML. Pas de logique métier dans le code-behind.
+TaskOrganizer.Tests/        Tests xUnit (Data, Services, ViewModels).
 ```
 
-Sens des dépendances (un projet ne référence que ceux en dessous de lui) :
+Sens des dépendances (par convention, au sein du même projet) :
 
 ```
-App
- ├─> Views ─────────> ViewModels ─┐
- ├─> Services ────────────────────┼─> Core
- └─> Data ────────────────────────┘
+Views ──> ViewModels ──> Services ──> Data ──> Models
+                                        ^
+                                        └── Models (entités utilisées partout)
 ```
 
-- `Core` ne dépend de rien d'autre dans la solution (entités POCO + interfaces).
-- `Data` dépend de `Core` (implémente les interfaces de repository).
-- `Services` dépend de `Core` et `Data`.
-- `ViewModels` dépend de `Core` et `Services` (jamais de `Data` directement).
+- `Models` ne dépend de rien d'autre (entités POCO + enums).
+- `Data` dépend de `Models` (EF Core, `ITacheRepository`/`TacheRepository`).
+- `Services` dépend de `Models` et `Data`.
+- `ViewModels` dépend de `Models` et `Services` (jamais de `Data` directement).
 - `Views` dépend de `ViewModels` (uniquement pour le typage du `DataContext`, pas de logique).
-- `App` est le seul projet à référencer tout le monde : c'est le composition root (DI) et le point d'entrée.
-- `Tests` référence les projets qu'il teste (`Core`, `Data`, `Services`, `ViewModels`).
+- `App.xaml.cs` est le seul point qui connaît tout : c'est le composition root (DI).
+- `TaskOrganizer.Tests` référence le projet `TaskOrganizer` dans son ensemble.
 
 ## Conventions de code
 - Langage du domaine : les entités et le vocabulaire métier restent en **français**
@@ -69,10 +72,11 @@ App
 - ViewModels : `ObservableObject` + attributs `[ObservableProperty]` /
   `[RelayCommand]` de CommunityToolkit.Mvvm plutôt que du code manuel de
   `INotifyPropertyChanged`.
-- Repository pattern : interfaces dans `Core` (`ITacheRepository`),
-  implémentations dans `Data`. Les couches au-dessus de `Data` ne connaissent
-  jamais EF Core directement.
-- Un projet par responsabilité (voir structure ci-dessus) ; pas de logique
+- Repository pattern : interface et implémentation vivent toutes les deux
+  dans `Data` (`ITacheRepository` / `TacheRepository`). Les couches
+  au-dessus (`Services`, `ViewModels`) dépendent de l'interface, jamais
+  d'EF Core directement.
+- Un dossier par responsabilité (voir structure ci-dessus) ; pas de logique
   métier dans les code-behind XAML.
 - Tests xUnit : un fichier de test par classe testée, structure
   Arrange/Act/Assert, nommage `MethodName_Scenario_ExpectedResult`.
