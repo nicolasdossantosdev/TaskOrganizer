@@ -3,55 +3,58 @@ using TaskOrganizer.Models;
 
 namespace TaskOrganizer.Data;
 
-public class TacheRepository : ITacheRepository
+public class TacheRepository : RepositoryBase, ITacheRepository
 {
-    private readonly IDbContextFactory<AppDbContext> _contextFactory;
-
     public TacheRepository(IDbContextFactory<AppDbContext> contextFactory)
+        : base(contextFactory)
     {
-        _contextFactory = contextFactory;
     }
 
-    public async Task<IReadOnlyList<Tache>> GetAllAsync(CancellationToken cancellationToken = default)
-    {
-        await using var context = await _contextFactory.CreateDbContextAsync(cancellationToken);
-        return await context.Taches
-            .AsNoTracking()
-            .OrderBy(t => t.DateEcheance)
-            .ToListAsync(cancellationToken);
-    }
+    public Task<IReadOnlyList<Tache>> GetAllAsync(CancellationToken cancellationToken = default) =>
+        ExecuterAsync<IReadOnlyList<Tache>>(
+            async context => await context.Taches
+                .AsNoTracking()
+                .OrderBy(t => t.DateEcheance)
+                .ToListAsync(cancellationToken),
+            cancellationToken);
 
-    public async Task<Tache?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
-    {
-        await using var context = await _contextFactory.CreateDbContextAsync(cancellationToken);
-        return await context.Taches.FirstOrDefaultAsync(t => t.Id == id, cancellationToken);
-    }
+    public Task<Tache?> GetByIdAsync(int id, CancellationToken cancellationToken = default) =>
+        ExecuterAsync(
+            async context => await context.Taches
+                .FirstOrDefaultAsync(t => t.Id == id, cancellationToken),
+            cancellationToken);
 
-    public async Task<Tache> AddAsync(Tache tache, CancellationToken cancellationToken = default)
-    {
-        await using var context = await _contextFactory.CreateDbContextAsync(cancellationToken);
-        context.Taches.Add(tache);
-        await context.SaveChangesAsync(cancellationToken);
-        return tache;
-    }
+    public Task<Tache> AddAsync(Tache tache, CancellationToken cancellationToken = default) =>
+        ExecuterAsync(
+            async context =>
+            {
+                context.Taches.Add(tache);
+                await context.SaveChangesAsync(cancellationToken);
+                return tache;
+            },
+            cancellationToken);
 
-    public async Task UpdateAsync(Tache tache, CancellationToken cancellationToken = default)
-    {
-        await using var context = await _contextFactory.CreateDbContextAsync(cancellationToken);
-        context.Taches.Update(tache);
-        await context.SaveChangesAsync(cancellationToken);
-    }
+    public Task UpdateAsync(Tache tache, CancellationToken cancellationToken = default) =>
+        ExecuterAsync(
+            async context =>
+            {
+                context.Taches.Update(tache);
+                await context.SaveChangesAsync(cancellationToken);
+            },
+            cancellationToken);
 
-    public async Task DeleteAsync(int id, CancellationToken cancellationToken = default)
-    {
-        await using var context = await _contextFactory.CreateDbContextAsync(cancellationToken);
-        var tache = await context.Taches.FirstOrDefaultAsync(t => t.Id == id, cancellationToken);
-        if (tache is null)
-        {
-            return;
-        }
+    public Task DeleteAsync(int id, CancellationToken cancellationToken = default) =>
+        ExecuterAsync(
+            async context =>
+            {
+                var tache = await context.Taches.FirstOrDefaultAsync(t => t.Id == id, cancellationToken);
+                if (tache is null)
+                {
+                    return;
+                }
 
-        context.Taches.Remove(tache);
-        await context.SaveChangesAsync(cancellationToken);
-    }
+                context.Taches.Remove(tache);
+                await context.SaveChangesAsync(cancellationToken);
+            },
+            cancellationToken);
 }
