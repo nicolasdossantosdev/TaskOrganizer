@@ -57,6 +57,7 @@ public partial class App : Application
         services.AddSingleton<ICategorieService, CategorieService>();
         services.AddSingleton<IRappelRepository, RappelRepository>();
         services.AddSingleton<IRappelService, RappelService>();
+        services.AddSingleton<INotificationService, ToastNotificationService>();
         services.AddSingleton<IDialogService, DialogService>();
 
         services.AddTransient<CreateTacheViewModel>();
