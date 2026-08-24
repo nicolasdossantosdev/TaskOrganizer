@@ -125,5 +125,9 @@
         <TabItem Header="Planning">
             <views:PlanningView DataContext="{Binding PlanningViewModel}" Margin="0,8,0,0" />
         </TabItem>
+
+        <TabItem Header="Paramètres">
+            <views:ParametresView DataContext="{Binding ParametresViewModel}" Margin="0,8,0,0" />
+        </TabItem>
     </TabControl>
 </Window>

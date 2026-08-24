@@ -18,6 +18,8 @@ public partial class MainViewModel : ObservableObject
 
     public PlanningViewModel PlanningViewModel { get; }
 
+    public ParametresViewModel ParametresViewModel { get; }
+
     public ObservableCollection<Tache> Taches { get; } = new();
 
     public ICollectionView TachesAffichees { get; }
@@ -36,12 +38,14 @@ public partial class MainViewModel : ObservableObject
         ITacheService tacheService,
         IDialogService dialogService,
         CreateTacheViewModel createTacheViewModel,
-        PlanningViewModel planningViewModel)
+        PlanningViewModel planningViewModel,
+        ParametresViewModel parametresViewModel)
     {
         _tacheService = tacheService;
         _dialogService = dialogService;
         CreateTacheViewModel = createTacheViewModel;
         PlanningViewModel = planningViewModel;
+        ParametresViewModel = parametresViewModel;
         CreateTacheViewModel.TacheEnregistree += (_, tache) =>
         {
             Taches.Insert(0, tache);

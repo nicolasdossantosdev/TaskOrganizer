@@ -95,6 +95,7 @@ public partial class App : Application
 
         services.AddTransient<CreateTacheViewModel>();
         services.AddTransient<PlanningViewModel>();
+        services.AddTransient<ParametresViewModel>();
         services.AddTransient<MainViewModel>();
         services.AddTransient<MainWindow>();
     }

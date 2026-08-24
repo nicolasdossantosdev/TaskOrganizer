@@ -1,0 +1,18 @@
+<UserControl x:Class="TaskOrganizer.Views.ParametresView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Language="fr-FR">
+    <StackPanel Margin="16" MaxWidth="480" HorizontalAlignment="Left">
+        <GroupBox Header="Apparence" Padding="12" Margin="0,0,0,16">
+            <StackPanel>
+                <TextBlock Text="Thème" Margin="0,0,0,4" />
+                <ComboBox ItemsSource="{Binding ThemesDisponibles}" SelectedItem="{Binding ThemeSelectionne}"
+                          Width="200" HorizontalAlignment="Left" />
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox Header="Notifications" Padding="12">
+            <CheckBox Content="Jouer un son lors des rappels" IsChecked="{Binding SonNotificationsActif}" />
+        </GroupBox>
+    </StackPanel>
+</UserControl>
