@@ -12,6 +12,9 @@ pour le contexte produit, le périmètre et les conventions du projet.
   catégories multiples, recherche et tri dans la liste, rappels programmables
   par tâche avec notifications toast Windows natives et résumé des rappels
   manqués au démarrage.
+- **Sprint 3** : onglet Planning avec bascule Jour/Semaine/Mois/Aujourd'hui/
+  À venir, replanification d'une tâche par glisser-déposer directement sur
+  le calendrier.
 
 ## Prérequis
 

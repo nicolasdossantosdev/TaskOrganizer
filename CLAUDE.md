@@ -110,8 +110,16 @@ WPF, tout en gardant l'ouverture de fenêtres du côté Views.
   notifications toast Windows natives (`Microsoft.Toolkit.Uwp.Notifications`,
   TFM `net10.0-windows10.0.19041.0`), résumé des rappels manqués au démarrage,
   fiabilisation de la persistance (`RepositoryBase` : retry + `PersistanceException`).
-- **Sprints suivants** (à détailler en temps voulu) : vue planning (calendrier
-  + drag & drop), thème clair/sombre.
+- **Sprint 3 — epic Planning** : vue Planning (`PlanningView`, `PlanningViewModel`)
+  avec bascule Jour/Semaine/Mois/Aujourd'hui/À venir (`ModePlanning`),
+  positionnement des tâches sur le calendrier via `IPlanningService`
+  (calcul pur, sans persistance, réutilise `ITacheService.ObtenirToutesAsync`
+  déjà existant), replanification par glisser-déposer (met à jour
+  `DateEcheance` et appelle `ITacheService.ModifierAsync`, avec revert en
+  mémoire sur `PersistanceException`). "Aujourd'hui" et "À venir" sont des
+  modes de la même vue plutôt que des écrans séparés, pour ne pas dupliquer
+  le rendu ni la logique de regroupement par jour.
+- **Sprints suivants** (à détailler en temps voulu) : thème clair/sombre.
 
 Chaque sprint est traité comme un epic indépendant : ne pas anticiper le
 code des sprints suivants tant qu'il n'a pas été explicitement démarré.
