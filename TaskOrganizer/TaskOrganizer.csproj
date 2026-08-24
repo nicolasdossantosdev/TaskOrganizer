@@ -14,6 +14,7 @@
          DataGrid...) de façon cohérente, ce qu'un jeu de styles maison
          n'aurait pas égalé sans un effort disproportionné pour ce projet. -->
     <NoWarn>$(NoWarn);WPF0001</NoWarn>
+    <ApplicationIcon>Resources\AppIcon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,6 +27,11 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.11" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.11" />
     <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.1.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Réutilisée pour l'icône de fenêtre (Window.Icon), en plus d'ApplicationIcon (icône de l'exe). -->
+    <Resource Include="Resources\AppIcon.ico" />
   </ItemGroup>
 
 </Project>

@@ -3,9 +3,23 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:views="clr-namespace:TaskOrganizer.Views"
         Title="TaskOrganizer" Height="650" Width="1050"
-        MinHeight="500" MinWidth="800">
+        MinHeight="500" MinWidth="800"
+        Icon="Resources/AppIcon.ico">
+    <Window.Resources>
+        <Style x:Key="StyleOngletAvecIcone" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Segoe Fluent Icons, Segoe MDL2 Assets" />
+            <Setter Property="Margin" Value="0,0,6,0" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+    </Window.Resources>
     <TabControl Margin="16">
-        <TabItem Header="Tâches">
+        <TabItem>
+            <TabItem.Header>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="&#xE8FD;" Style="{StaticResource StyleOngletAvecIcone}" />
+                    <TextBlock Text="Tâches" VerticalAlignment="Center" />
+                </StackPanel>
+            </TabItem.Header>
     <Grid Margin="0,8,0,0">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -72,7 +86,12 @@
                 </StackPanel>
 
                 <StackPanel Grid.Row="1" Grid.Column="5" Grid.RowSpan="2" VerticalAlignment="Bottom" Margin="4">
-                    <Button Content="Ajouter" Padding="16,6" Command="{Binding EnregistrerCommand}" />
+                    <Button Padding="16,6" Command="{Binding EnregistrerCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE710;" Style="{StaticResource StyleOngletAvecIcone}" Margin="0,0,4,0" />
+                            <TextBlock Text="Ajouter" />
+                        </StackPanel>
+                    </Button>
                 </StackPanel>
             </Grid>
         </GroupBox>
@@ -107,12 +126,16 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <Button Content="Modifier" Margin="2" Padding="8,2"
+                                <Button Margin="2" Padding="8,2" ToolTip="Modifier"
                                         Command="{Binding DataContext.ModifierCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                        CommandParameter="{Binding}" />
-                                <Button Content="Supprimer" Margin="2" Padding="8,2"
+                                        CommandParameter="{Binding}">
+                                    <TextBlock Text="&#xE70F;" Style="{StaticResource StyleOngletAvecIcone}" Margin="0" />
+                                </Button>
+                                <Button Margin="2" Padding="8,2" ToolTip="Supprimer"
                                         Command="{Binding DataContext.SupprimerCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                        CommandParameter="{Binding}" />
+                                        CommandParameter="{Binding}">
+                                    <TextBlock Text="&#xE74D;" Style="{StaticResource StyleOngletAvecIcone}" Margin="0" />
+                                </Button>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -122,11 +145,23 @@
     </Grid>
         </TabItem>
 
-        <TabItem Header="Planning">
+        <TabItem>
+            <TabItem.Header>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="&#xE787;" Style="{StaticResource StyleOngletAvecIcone}" />
+                    <TextBlock Text="Planning" VerticalAlignment="Center" />
+                </StackPanel>
+            </TabItem.Header>
             <views:PlanningView DataContext="{Binding PlanningViewModel}" Margin="0,8,0,0" />
         </TabItem>
 
-        <TabItem Header="Paramètres">
+        <TabItem>
+            <TabItem.Header>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="&#xE713;" Style="{StaticResource StyleOngletAvecIcone}" />
+                    <TextBlock Text="Paramètres" VerticalAlignment="Center" />
+                </StackPanel>
+            </TabItem.Header>
             <views:ParametresView DataContext="{Binding ParametresViewModel}" Margin="0,8,0,0" />
         </TabItem>
     </TabControl>
