@@ -68,9 +68,12 @@ public partial class App : Application
             "TaskOrganizer");
         Directory.CreateDirectory(appDataFolder);
         var dbPath = Path.Combine(appDataFolder, "taskorganizer.db");
+        var parametresPath = Path.Combine(appDataFolder, "parametres.json");
 
         services.AddDbContextFactory<AppDbContext>(options =>
             options.UseSqlite($"Data Source={dbPath}"));
+
+        services.AddSingleton<IParametresService>(_ => new ParametresService(parametresPath));
 
         services.AddSingleton<ITacheRepository, TacheRepository>();
         services.AddSingleton<ITacheService, TacheService>();
