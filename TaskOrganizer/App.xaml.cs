@@ -55,6 +55,7 @@ public partial class App : Application
         services.AddSingleton<ITacheService, TacheService>();
         services.AddSingleton<ICategorieRepository, CategorieRepository>();
         services.AddSingleton<ICategorieService, CategorieService>();
+        services.AddSingleton<IDialogService, DialogService>();
 
         services.AddTransient<CreateTacheViewModel>();
         services.AddTransient<MainViewModel>();

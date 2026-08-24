@@ -1,0 +1,32 @@
+<Window x:Class="TaskOrganizer.Views.EditTacheWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Modifier la tâche" Height="420" Width="480"
+        WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
+    <StackPanel Margin="16">
+        <TextBlock Text="Titre *" />
+        <TextBox Text="{Binding Titre, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" Margin="0,0,0,8" />
+
+        <TextBlock Text="Description" />
+        <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" Height="60" TextWrapping="Wrap" Margin="0,0,0,8" />
+
+        <TextBlock Text="Échéance *" />
+        <DatePicker SelectedDate="{Binding DateEcheance, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" Margin="0,0,0,8" />
+
+        <TextBlock Text="Priorité" />
+        <ComboBox ItemsSource="{Binding PrioritesDisponibles}" SelectedItem="{Binding Priorite}" Margin="0,0,0,8" />
+
+        <TextBlock Text="Statut" />
+        <ComboBox ItemsSource="{Binding StatutsDisponibles}" SelectedItem="{Binding Statut}" Margin="0,0,0,8" />
+
+        <TextBlock Text="Catégories (séparées par des virgules)" />
+        <TextBox Text="{Binding CategoriesTexte, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,8" />
+
+        <TextBlock Text="{Binding ErreurEnregistrement}" Foreground="Red" TextWrapping="Wrap" Margin="0,0,0,8" />
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Annuler" Padding="16,6" Margin="0,0,8,0" Click="AnnulerButton_Click" />
+            <Button Content="Enregistrer" Padding="16,6" Command="{Binding EnregistrerCommand}" />
+        </StackPanel>
+    </StackPanel>
+</Window>
