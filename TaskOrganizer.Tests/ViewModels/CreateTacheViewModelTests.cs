@@ -95,11 +95,25 @@ public class CreateTacheViewModelTests
         public Task<IReadOnlyList<Tache>> ObtenirToutesAsync(CancellationToken cancellationToken = default)
             => Task.FromResult<IReadOnlyList<Tache>>(TachesCreees);
 
+        public Task<Tache?> ObtenirParIdAsync(int id, CancellationToken cancellationToken = default)
+            => Task.FromResult(TachesCreees.FirstOrDefault(t => t.Id == id));
+
         public Task<Tache> CreerAsync(Tache tache, CancellationToken cancellationToken = default)
         {
             tache.Id = TachesCreees.Count + 1;
             TachesCreees.Add(tache);
             return Task.FromResult(tache);
+        }
+
+        public Task ModifierAsync(Tache tache, CancellationToken cancellationToken = default)
+        {
+            var index = TachesCreees.FindIndex(t => t.Id == tache.Id);
+            if (index >= 0)
+            {
+                TachesCreees[index] = tache;
+            }
+
+            return Task.CompletedTask;
         }
 
         public Task SupprimerAsync(int id, CancellationToken cancellationToken = default)

@@ -8,6 +8,7 @@ namespace TaskOrganizer.Tests.Data;
 public class TacheRepositoryTests : IDisposable
 {
     private readonly SqliteConnection _connection;
+    private readonly DbContextOptions<AppDbContext> _options;
     private readonly TacheRepository _repository;
 
     public TacheRepositoryTests()
@@ -15,16 +16,16 @@ public class TacheRepositoryTests : IDisposable
         _connection = new SqliteConnection("Data Source=:memory:");
         _connection.Open();
 
-        var options = new DbContextOptionsBuilder<AppDbContext>()
+        _options = new DbContextOptionsBuilder<AppDbContext>()
             .UseSqlite(_connection)
             .Options;
 
-        using (var context = new AppDbContext(options))
+        using (var context = new AppDbContext(_options))
         {
             context.Database.EnsureCreated();
         }
 
-        _repository = new TacheRepository(new TestDbContextFactory(options));
+        _repository = new TacheRepository(new TestDbContextFactory(_options));
     }
 
     public void Dispose() => _connection.Dispose();
@@ -86,15 +87,26 @@ public class TacheRepositoryTests : IDisposable
         await _repository.DeleteAsync(999);
     }
 
-    private sealed class TestDbContextFactory : IDbContextFactory<AppDbContext>
+    [Fact]
+    public async Task UpdateAsync_AvecCategories_RemplaceLesCategoriesExistantes()
     {
-        private readonly DbContextOptions<AppDbContext> _options;
+        var categorieRepository = new CategorieRepository(new TestDbContextFactory(_options));
+        var categories = await categorieRepository.GetOrCreateByNomsAsync(new[] { "Maison", "Urgent" });
 
-        public TestDbContextFactory(DbContextOptions<AppDbContext> options)
-        {
-            _options = options;
-        }
+        var tache = await _repository.AddAsync(new Tache { Titre = "Avec catégories", DateEcheance = DateTime.Today });
+        tache.Categories = categories.ToList();
+        await _repository.UpdateAsync(tache);
 
-        public AppDbContext CreateDbContext() => new(_options);
+        var recuperee = await _repository.GetByIdAsync(tache.Id);
+        Assert.Equal(2, recuperee!.Categories.Count);
+        Assert.Contains(recuperee.Categories, c => c.Nom == "Maison");
+
+        var nouvelleCategorie = await categorieRepository.GetOrCreateByNomsAsync(new[] { "Perso" });
+        recuperee.Categories = nouvelleCategorie.ToList();
+        await _repository.UpdateAsync(recuperee);
+
+        var apresRemplacement = await _repository.GetByIdAsync(tache.Id);
+        Assert.Single(apresRemplacement!.Categories);
+        Assert.Equal("Perso", apresRemplacement.Categories.Single().Nom);
     }
 }

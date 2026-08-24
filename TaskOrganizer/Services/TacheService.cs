@@ -17,9 +17,19 @@ public class TacheService : ITacheService
         return _tacheRepository.GetAllAsync(cancellationToken);
     }
 
+    public Task<Tache?> ObtenirParIdAsync(int id, CancellationToken cancellationToken = default)
+    {
+        return _tacheRepository.GetByIdAsync(id, cancellationToken);
+    }
+
     public Task<Tache> CreerAsync(Tache tache, CancellationToken cancellationToken = default)
     {
         return _tacheRepository.AddAsync(tache, cancellationToken);
+    }
+
+    public Task ModifierAsync(Tache tache, CancellationToken cancellationToken = default)
+    {
+        return _tacheRepository.UpdateAsync(tache, cancellationToken);
     }
 
     public Task SupprimerAsync(int id, CancellationToken cancellationToken = default)

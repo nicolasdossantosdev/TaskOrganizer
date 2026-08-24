@@ -6,7 +6,11 @@ public interface ITacheService
 {
     Task<IReadOnlyList<Tache>> ObtenirToutesAsync(CancellationToken cancellationToken = default);
 
+    Task<Tache?> ObtenirParIdAsync(int id, CancellationToken cancellationToken = default);
+
     Task<Tache> CreerAsync(Tache tache, CancellationToken cancellationToken = default);
+
+    Task ModifierAsync(Tache tache, CancellationToken cancellationToken = default);
 
     Task SupprimerAsync(int id, CancellationToken cancellationToken = default);
 }

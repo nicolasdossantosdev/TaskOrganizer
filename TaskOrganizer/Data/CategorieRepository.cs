@@ -35,9 +35,13 @@ public class CategorieRepository : RepositoryBase, ICategorieRepository
                     .Distinct(StringComparer.OrdinalIgnoreCase)
                     .ToList();
 
-                var existantes = await context.Categories
-                    .Where(c => nomsNormalises.Contains(c.Nom))
-                    .ToListAsync(cancellationToken);
+                // Comparaison en mémoire (insensible à la casse) : SQLite compare les
+                // TEXT de façon sensible à la casse par défaut, un filtre SQL sur
+                // nomsNormalises.Contains(c.Nom) manquerait donc "maison" vs "Maison".
+                var toutes = await context.Categories.ToListAsync(cancellationToken);
+                var existantes = toutes
+                    .Where(c => nomsNormalises.Any(nom => string.Equals(nom, c.Nom, StringComparison.OrdinalIgnoreCase)))
+                    .ToList();
 
                 var manquantes = nomsNormalises
                     .Where(nom => !existantes.Any(c => string.Equals(c.Nom, nom, StringComparison.OrdinalIgnoreCase)))
