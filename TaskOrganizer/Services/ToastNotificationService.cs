@@ -6,6 +6,13 @@ namespace TaskOrganizer.Services;
 /// <summary>Notifications toast Windows natives (Centre de notifications), via Microsoft.Toolkit.Uwp.Notifications.</summary>
 public class ToastNotificationService : INotificationService
 {
+    private readonly IParametresService _parametresService;
+
+    public ToastNotificationService(IParametresService parametresService)
+    {
+        _parametresService = parametresService;
+    }
+
     public void AfficherRappel(Rappel rappel)
     {
         var titreTache = rappel.Tache?.Titre ?? "Tâche";
@@ -22,7 +29,7 @@ public class ToastNotificationService : INotificationService
             builder.AddText($"Échéance : {echeance}");
         }
 
-        builder.Show();
+        AppliquerSonEtAfficher(builder);
     }
 
     public void AfficherResumeRappelsManques(IReadOnlyList<Rappel> rappelsManques)
@@ -32,9 +39,20 @@ public class ToastNotificationService : INotificationService
             return;
         }
 
-        new ToastContentBuilder()
+        var builder = new ToastContentBuilder()
             .AddText("Rappels manqués")
-            .AddText($"{rappelsManques.Count} rappel(s) n'ont pas pu être affichés pendant que l'application était fermée.")
-            .Show();
+            .AddText($"{rappelsManques.Count} rappel(s) n'ont pas pu être affichés pendant que l'application était fermée.");
+
+        AppliquerSonEtAfficher(builder);
+    }
+
+    private void AppliquerSonEtAfficher(ToastContentBuilder builder)
+    {
+        if (!_parametresService.ParametresActuels.SonNotificationsActif)
+        {
+            builder.AddAudio(new ToastAudio { Silent = true });
+        }
+
+        builder.Show();
     }
 }
