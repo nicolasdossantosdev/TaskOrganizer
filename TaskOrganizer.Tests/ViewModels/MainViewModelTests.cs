@@ -15,7 +15,11 @@ public class MainViewModelTests
         dialogService ??= new FakeDialogService();
         var createTacheViewModel = new CreateTacheViewModel(tacheService, new FakeCategorieService(), new FakeRappelService());
         var planningViewModel = new PlanningViewModel(tacheService, new PlanningService(), dialogService);
-        var parametresViewModel = new ParametresViewModel(new FakeParametresService(), new FakeThemeService());
+        var parametresViewModel = new ParametresViewModel(
+            new FakeParametresService(),
+            new FakeThemeService(),
+            new FakeExportImportService(),
+            dialogService);
         return new MainViewModel(tacheService, dialogService, createTacheViewModel, planningViewModel, parametresViewModel);
     }
 

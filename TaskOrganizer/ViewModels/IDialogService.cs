@@ -16,4 +16,12 @@ public interface IDialogService
     bool ConfirmerSuppression(Tache tache);
 
     void AfficherErreur(string message);
+
+    void AfficherInformation(string message);
+
+    /// <summary>Boîte de dialogue "Enregistrer sous". Retourne le chemin choisi, ou null si annulé.</summary>
+    string? ChoisirFichierExport(string nomFichierParDefaut, string filtre);
+
+    /// <summary>Boîte de dialogue "Ouvrir". Retourne le chemin choisi, ou null si annulé.</summary>
+    string? ChoisirFichierImport(string filtre);
 }

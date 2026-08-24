@@ -11,8 +11,21 @@
             </StackPanel>
         </GroupBox>
 
-        <GroupBox Header="Notifications" Padding="12">
+        <GroupBox Header="Notifications" Padding="12" Margin="0,0,0,16">
             <CheckBox Content="Jouer un son lors des rappels" IsChecked="{Binding SonNotificationsActif}" />
+        </GroupBox>
+
+        <GroupBox Header="Export / Import" Padding="12">
+            <StackPanel>
+                <TextBlock Text="Exporter toutes les tâches :" Margin="0,0,0,4" />
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                    <Button Content="Exporter en JSON" Padding="10,4" Margin="0,0,8,0" Command="{Binding ExporterJsonCommand}" />
+                    <Button Content="Exporter en CSV" Padding="10,4" Command="{Binding ExporterCsvCommand}" />
+                </StackPanel>
+
+                <TextBlock Text="Importer des tâches depuis un fichier JSON exporté par TaskOrganizer :" Margin="0,0,0,4" TextWrapping="Wrap" />
+                <Button Content="Importer depuis JSON" Padding="10,4" HorizontalAlignment="Left" Command="{Binding ImporterJsonCommand}" />
+            </StackPanel>
         </GroupBox>
     </StackPanel>
 </UserControl>

@@ -9,11 +9,23 @@ internal sealed class FakeDialogService : IDialogService
 
     public bool OuvrirFenetreEditionReponse { get; set; } = true;
 
+    public string? CheminFichierExportChoisi { get; set; }
+
+    public string? CheminFichierImportChoisi { get; set; }
+
     public List<string> ErreursAffichees { get; } = new();
+
+    public List<string> InformationsAffichees { get; } = new();
 
     public bool OuvrirFenetreEdition(Tache tache) => OuvrirFenetreEditionReponse;
 
     public bool ConfirmerSuppression(Tache tache) => ConfirmerSuppressionReponse;
 
     public void AfficherErreur(string message) => ErreursAffichees.Add(message);
+
+    public void AfficherInformation(string message) => InformationsAffichees.Add(message);
+
+    public string? ChoisirFichierExport(string nomFichierParDefaut, string filtre) => CheminFichierExportChoisi;
+
+    public string? ChoisirFichierImport(string filtre) => CheminFichierImportChoisi;
 }

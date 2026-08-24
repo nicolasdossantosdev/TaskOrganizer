@@ -91,6 +91,7 @@ public partial class App : Application
         services.AddSingleton<IPlanningService, PlanningService>();
         services.AddSingleton<IDialogService, DialogService>();
         services.AddSingleton<IThemeService, ThemeService>();
+        services.AddSingleton<IExportImportService, ExportImportService>();
         services.AddSingleton<RappelBackgroundService>();
 
         services.AddTransient<CreateTacheViewModel>();

@@ -48,4 +48,33 @@ public class DialogService : IDialogService
             MessageBoxButton.OK,
             MessageBoxImage.Error);
     }
+
+    public void AfficherInformation(string message)
+    {
+        MessageBox.Show(
+            Application.Current.MainWindow,
+            message,
+            "TaskOrganizer",
+            MessageBoxButton.OK,
+            MessageBoxImage.Information);
+    }
+
+    public string? ChoisirFichierExport(string nomFichierParDefaut, string filtre)
+    {
+        var dialogue = new Microsoft.Win32.SaveFileDialog
+        {
+            FileName = nomFichierParDefaut,
+            Filter = filtre,
+        };
+        return dialogue.ShowDialog(Application.Current.MainWindow) == true ? dialogue.FileName : null;
+    }
+
+    public string? ChoisirFichierImport(string filtre)
+    {
+        var dialogue = new Microsoft.Win32.OpenFileDialog
+        {
+            Filter = filtre,
+        };
+        return dialogue.ShowDialog(Application.Current.MainWindow) == true ? dialogue.FileName : null;
+    }
 }

@@ -52,6 +52,11 @@ public partial class MainViewModel : ObservableObject
             PlanningViewModel.ChargerCommand.ExecuteAsync(null);
         };
         PlanningViewModel.TacheReplanifiee += (_, _) => ChargerCommand.ExecuteAsync(null);
+        ParametresViewModel.DonneesImportees += (_, _) =>
+        {
+            ChargerCommand.ExecuteAsync(null);
+            PlanningViewModel.ChargerCommand.ExecuteAsync(null);
+        };
 
         TachesAffichees = CollectionViewSource.GetDefaultView(Taches);
         TachesAffichees.Filter = FiltrerTache;
