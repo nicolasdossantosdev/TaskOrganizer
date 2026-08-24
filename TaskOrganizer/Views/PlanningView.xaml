@@ -1,0 +1,81 @@
+<UserControl x:Class="TaskOrganizer.Views.PlanningView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:models="clr-namespace:TaskOrganizer.Models"
+             Language="fr-FR">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolVersVisibilite" />
+    </UserControl.Resources>
+
+    <Grid Margin="0,8,0,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Barre d'outils : mode, navigation, libellé de la période -->
+        <DockPanel Grid.Row="0" Margin="0,0,0,8">
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+                <ComboBox Width="140" ItemsSource="{Binding ModesDisponibles}" SelectedItem="{Binding ModeActuel}" Margin="0,0,12,0" />
+                <Button Content="◀" Padding="10,4" Margin="0,0,4,0"
+                        Command="{Binding PeriodePrecedenteCommand}"
+                        Visibility="{Binding PeutNaviguer, Converter={StaticResource BoolVersVisibilite}}" />
+                <Button Content="Aujourd'hui" Padding="10,4" Margin="0,0,4,0" Command="{Binding AllerAAujourdhuiCommand}" />
+                <Button Content="▶" Padding="10,4"
+                        Command="{Binding PeriodeSuivanteCommand}"
+                        Visibility="{Binding PeutNaviguer, Converter={StaticResource BoolVersVisibilite}}" />
+            </StackPanel>
+            <TextBlock Text="{Binding LibellePeriode}" FontSize="16" FontWeight="Bold"
+                       HorizontalAlignment="Center" VerticalAlignment="Center" />
+        </DockPanel>
+
+        <!-- Grille des jours -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <ItemsControl ItemsSource="{Binding JoursAffiches}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="{Binding ColonnesAffichage}" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="{x:Type models:JourPlanning}">
+                        <Border BorderBrush="#DDDDDD" BorderThickness="1" Margin="2" Padding="4" MinHeight="110"
+                                AllowDrop="True" Drop="JourCard_Drop">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Background" Value="White" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding EstAujourdhui}" Value="True">
+                                            <Setter Property="Background" Value="#FFF6D9" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding EstDansLaPeriodePrincipale}" Value="False">
+                                            <Setter Property="Opacity" Value="0.45" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <DockPanel>
+                                <TextBlock DockPanel.Dock="Top" Text="{Binding Date, StringFormat=dd/MM}" FontWeight="Bold" Margin="0,0,0,4" />
+                                <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="150">
+                                    <ItemsControl ItemsSource="{Binding Taches}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate DataType="{x:Type models:Tache}">
+                                                <Border Background="#EAF1FF" CornerRadius="3" Margin="0,0,0,2" Padding="4,2"
+                                                        Cursor="Hand"
+                                                        PreviewMouseLeftButtonDown="TacheChip_PreviewMouseLeftButtonDown"
+                                                        MouseMove="TacheChip_MouseMove">
+                                                    <TextBlock Text="{Binding Titre}" TextWrapping="Wrap" ToolTip="{Binding Titre}" FontSize="12" />
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </ScrollViewer>
+                            </DockPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+</UserControl>
