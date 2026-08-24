@@ -32,7 +32,8 @@ public class TacheConfiguration : IEntityTypeConfiguration<Tache>
             .HasConversion<string>()
             .HasMaxLength(20);
 
-        builder.Property(t => t.Categorie)
-            .HasMaxLength(100);
+        builder.HasMany(t => t.Categories)
+            .WithMany(c => c.Taches)
+            .UsingEntity(j => j.ToTable("TacheCategories"));
     }
 }

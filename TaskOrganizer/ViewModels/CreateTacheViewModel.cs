@@ -9,6 +9,7 @@ namespace TaskOrganizer.ViewModels;
 public partial class CreateTacheViewModel : ObservableValidator
 {
     private readonly ITacheService _tacheService;
+    private readonly ICategorieService _categorieService;
 
     [ObservableProperty]
     [NotifyDataErrorInfo]
@@ -32,8 +33,9 @@ public partial class CreateTacheViewModel : ObservableValidator
     [ObservableProperty]
     private StatutTache statut = StatutTache.ATraiter;
 
+    /// <summary>Noms de catégories séparés par des virgules (ex : "Maison, Urgent").</summary>
     [ObservableProperty]
-    private string? categorie;
+    private string? categoriesTexte;
 
     public IReadOnlyList<PrioriteTache> PrioritesDisponibles { get; } = Enum.GetValues<PrioriteTache>();
 
@@ -41,9 +43,10 @@ public partial class CreateTacheViewModel : ObservableValidator
 
     public event EventHandler<Tache>? TacheCreee;
 
-    public CreateTacheViewModel(ITacheService tacheService)
+    public CreateTacheViewModel(ITacheService tacheService, ICategorieService categorieService)
     {
         _tacheService = tacheService;
+        _categorieService = categorieService;
         ValidateAllProperties();
     }
 
@@ -58,6 +61,12 @@ public partial class CreateTacheViewModel : ObservableValidator
             return;
         }
 
+        var nomsCategories = (CategoriesTexte ?? string.Empty)
+            .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
+        var categories = await _categorieService.ObtenirOuCreerAsync(nomsCategories);
+
         var tache = new Tache
         {
             Titre = Titre,
@@ -65,8 +74,11 @@ public partial class CreateTacheViewModel : ObservableValidator
             DateEcheance = DateEcheance!.Value,
             Priorite = Priorite,
             Statut = Statut,
-            Categorie = Categorie,
         };
+        foreach (var categorie in categories)
+        {
+            tache.Categories.Add(categorie);
+        }
 
         var tacheCreee = await _tacheService.CreerAsync(tache);
         TacheCreee?.Invoke(this, tacheCreee);
@@ -80,6 +92,6 @@ public partial class CreateTacheViewModel : ObservableValidator
         DateEcheance = null;
         Priorite = PrioriteTache.Normale;
         Statut = StatutTache.ATraiter;
-        Categorie = null;
+        CategoriesTexte = null;
     }
 }

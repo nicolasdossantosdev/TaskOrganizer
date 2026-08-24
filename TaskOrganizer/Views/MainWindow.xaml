@@ -51,8 +51,8 @@
                 </StackPanel>
 
                 <StackPanel Grid.Row="1" Grid.Column="0" Margin="4">
-                    <TextBlock Text="Catégorie" />
-                    <TextBox Text="{Binding Categorie, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBlock Text="Catégories (séparées par des virgules)" />
+                    <TextBox Text="{Binding CategoriesTexte, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
 
                 <StackPanel Grid.Row="1" Grid.Column="5" Grid.RowSpan="2" VerticalAlignment="Bottom" Margin="4">
@@ -69,7 +69,7 @@
                 <DataGridTextColumn Header="Échéance" Binding="{Binding DateEcheance, StringFormat=dd/MM/yyyy}" Width="*" />
                 <DataGridTextColumn Header="Priorité" Binding="{Binding Priorite}" Width="*" />
                 <DataGridTextColumn Header="Statut" Binding="{Binding Statut}" Width="*" />
-                <DataGridTextColumn Header="Catégorie" Binding="{Binding Categorie}" Width="*" />
+                <DataGridTextColumn Header="Catégories" Binding="{Binding CategoriesAffichees}" Width="*" />
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

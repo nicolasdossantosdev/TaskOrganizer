@@ -14,6 +14,7 @@ public class TacheRepository : RepositoryBase, ITacheRepository
         ExecuterAsync<IReadOnlyList<Tache>>(
             async context => await context.Taches
                 .AsNoTracking()
+                .Include(t => t.Categories)
                 .OrderBy(t => t.DateEcheance)
                 .ToListAsync(cancellationToken),
             cancellationToken);
@@ -21,6 +22,7 @@ public class TacheRepository : RepositoryBase, ITacheRepository
     public Task<Tache?> GetByIdAsync(int id, CancellationToken cancellationToken = default) =>
         ExecuterAsync(
             async context => await context.Taches
+                .Include(t => t.Categories)
                 .FirstOrDefaultAsync(t => t.Id == id, cancellationToken),
             cancellationToken);
 
@@ -38,7 +40,24 @@ public class TacheRepository : RepositoryBase, ITacheRepository
         ExecuterAsync(
             async context =>
             {
-                context.Taches.Update(tache);
+                var existante = await context.Taches
+                    .Include(t => t.Categories)
+                    .FirstOrDefaultAsync(t => t.Id == tache.Id, cancellationToken);
+                if (existante is null)
+                {
+                    return;
+                }
+
+                context.Entry(existante).CurrentValues.SetValues(tache);
+
+                existante.Categories.Clear();
+                foreach (var categorie in tache.Categories)
+                {
+                    var categorieTrackee = context.Categories.Local.FirstOrDefault(c => c.Id == categorie.Id)
+                        ?? context.Categories.Attach(categorie).Entity;
+                    existante.Categories.Add(categorieTrackee);
+                }
+
                 await context.SaveChangesAsync(cancellationToken);
             },
             cancellationToken);

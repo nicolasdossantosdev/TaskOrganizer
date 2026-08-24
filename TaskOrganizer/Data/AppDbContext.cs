@@ -12,6 +12,8 @@ public class AppDbContext : DbContext
 
     public DbSet<Tache> Taches => Set<Tache>();
 
+    public DbSet<Categorie> Categories => Set<Categorie>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);

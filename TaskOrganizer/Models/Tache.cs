@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TaskOrganizer.Models;
 
@@ -20,6 +21,8 @@ public class Tache
 
     public StatutTache Statut { get; set; } = StatutTache.ATraiter;
 
-    [MaxLength(100)]
-    public string? Categorie { get; set; }
+    public ICollection<Categorie> Categories { get; set; } = new List<Categorie>();
+
+    [NotMapped]
+    public string CategoriesAffichees => string.Join(", ", Categories.Select(c => c.Nom));
 }
