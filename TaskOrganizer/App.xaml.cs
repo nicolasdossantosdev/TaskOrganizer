@@ -31,6 +31,12 @@ public partial class App : Application
             dbContext.Database.Migrate();
         }
 
+        // Thème appliqué avant l'affichage de la fenêtre principale pour
+        // éviter un flash dans le mauvais thème au démarrage.
+        var parametresService = _serviceProvider.GetRequiredService<IParametresService>();
+        var parametres = await parametresService.ChargerAsync();
+        _serviceProvider.GetRequiredService<IThemeService>().Appliquer(parametres.Theme);
+
         // Rappels dus pendant que l'application était fermée : on les "draine"
         // en un résumé avant de démarrer la scrutation en direct, pour ne pas
         // les redéclencher individuellement en tant que toasts.
@@ -84,6 +90,7 @@ public partial class App : Application
         services.AddSingleton<INotificationService, ToastNotificationService>();
         services.AddSingleton<IPlanningService, PlanningService>();
         services.AddSingleton<IDialogService, DialogService>();
+        services.AddSingleton<IThemeService, ThemeService>();
         services.AddSingleton<RappelBackgroundService>();
 
         services.AddTransient<CreateTacheViewModel>();

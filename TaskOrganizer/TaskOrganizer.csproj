@@ -7,6 +7,13 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <RootNamespace>TaskOrganizer</RootNamespace>
+    <!-- Application.ThemeMode (thème Fluent clair/sombre/système intégré à WPF)
+         est marqué expérimental (WPF0001) par Microsoft dans ce SDK : l'API
+         pourrait changer. Choix assumé (voir CLAUDE.md, Sprint 4) : il retheme
+         automatiquement tous les contrôles standards (Button, ComboBox,
+         DataGrid...) de façon cohérente, ce qu'un jeu de styles maison
+         n'aurait pas égalé sans un effort disproportionné pour ce projet. -->
+    <NoWarn>$(NoWarn);WPF0001</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
