@@ -69,7 +69,7 @@ public class CreateTacheViewModelTests
         };
 
         Tache? tacheRecue = null;
-        viewModel.TacheCreee += (_, tache) => tacheRecue = tache;
+        viewModel.TacheEnregistree += (_, tache) => tacheRecue = tache;
 
         await viewModel.EnregistrerCommand.ExecuteAsync(null);
 

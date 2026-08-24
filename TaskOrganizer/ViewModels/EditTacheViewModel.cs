@@ -3,15 +3,18 @@ using TaskOrganizer.Services;
 
 namespace TaskOrganizer.ViewModels;
 
-public partial class CreateTacheViewModel : TacheFormViewModelBase
+public partial class EditTacheViewModel : TacheFormViewModelBase
 {
     private readonly ITacheService _tacheService;
     private readonly ICategorieService _categorieService;
+    private readonly int _tacheId;
 
-    public CreateTacheViewModel(ITacheService tacheService, ICategorieService categorieService)
+    public EditTacheViewModel(Tache tache, ITacheService tacheService, ICategorieService categorieService)
     {
         _tacheService = tacheService;
         _categorieService = categorieService;
+        _tacheId = tache.Id;
+        RemplirDepuis(tache);
     }
 
     protected override async Task<Tache> PersisterAsync(IReadOnlyList<string> nomsCategories)
@@ -20,6 +23,7 @@ public partial class CreateTacheViewModel : TacheFormViewModelBase
 
         var tache = new Tache
         {
+            Id = _tacheId,
             Titre = Titre,
             Description = Description,
             DateEcheance = DateEcheance!.Value,
@@ -31,16 +35,7 @@ public partial class CreateTacheViewModel : TacheFormViewModelBase
             tache.Categories.Add(categorie);
         }
 
-        return await _tacheService.CreerAsync(tache);
-    }
-
-    protected override void ApresEnregistrement()
-    {
-        Titre = string.Empty;
-        Description = null;
-        DateEcheance = null;
-        Priorite = PrioriteTache.Normale;
-        Statut = StatutTache.ATraiter;
-        CategoriesTexte = null;
+        await _tacheService.ModifierAsync(tache);
+        return tache;
     }
 }

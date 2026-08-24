@@ -18,7 +18,7 @@ public partial class MainViewModel : ObservableObject
     {
         _tacheService = tacheService;
         CreateTacheViewModel = createTacheViewModel;
-        CreateTacheViewModel.TacheCreee += (_, tache) => Taches.Insert(0, tache);
+        CreateTacheViewModel.TacheEnregistree += (_, tache) => Taches.Insert(0, tache);
 
         ChargerCommand.ExecuteAsync(null);
     }

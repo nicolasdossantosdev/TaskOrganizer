@@ -1,0 +1,103 @@
+using System.ComponentModel.DataAnnotations;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using TaskOrganizer.Data;
+using TaskOrganizer.Models;
+
+namespace TaskOrganizer.ViewModels;
+
+/// <summary>
+/// Champs, validation et logique d'enregistrement partagés entre le formulaire de
+/// création et le formulaire d'édition d'une tâche.
+/// </summary>
+public abstract partial class TacheFormViewModelBase : ObservableValidator
+{
+    [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [NotifyCanExecuteChangedFor(nameof(EnregistrerCommand))]
+    [Required(ErrorMessage = "Le titre est obligatoire.")]
+    [MaxLength(200, ErrorMessage = "Le titre ne peut pas dépasser 200 caractères.")]
+    private string titre = string.Empty;
+
+    [ObservableProperty]
+    private string? description;
+
+    [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [NotifyCanExecuteChangedFor(nameof(EnregistrerCommand))]
+    [Required(ErrorMessage = "La date d'échéance est obligatoire.")]
+    private DateTime? dateEcheance;
+
+    [ObservableProperty]
+    private PrioriteTache priorite = PrioriteTache.Normale;
+
+    [ObservableProperty]
+    private StatutTache statut = StatutTache.ATraiter;
+
+    /// <summary>Noms de catégories séparés par des virgules (ex : "Maison, Urgent").</summary>
+    [ObservableProperty]
+    private string? categoriesTexte;
+
+    [ObservableProperty]
+    private string? erreurEnregistrement;
+
+    public IReadOnlyList<PrioriteTache> PrioritesDisponibles { get; } = Enum.GetValues<PrioriteTache>();
+
+    public IReadOnlyList<StatutTache> StatutsDisponibles { get; } = Enum.GetValues<StatutTache>();
+
+    public event EventHandler<Tache>? TacheEnregistree;
+
+    protected TacheFormViewModelBase()
+    {
+        ValidateAllProperties();
+    }
+
+    private bool PeutEnregistrer() => !HasErrors;
+
+    [RelayCommand(CanExecute = nameof(PeutEnregistrer))]
+    private async Task EnregistrerAsync()
+    {
+        ValidateAllProperties();
+        if (HasErrors)
+        {
+            return;
+        }
+
+        try
+        {
+            ErreurEnregistrement = null;
+            var nomsCategories = ParseNomsCategories(CategoriesTexte);
+            var tache = await PersisterAsync(nomsCategories);
+            TacheEnregistree?.Invoke(this, tache);
+            ApresEnregistrement();
+        }
+        catch (PersistanceException ex)
+        {
+            ErreurEnregistrement = ex.Message;
+        }
+    }
+
+    /// <summary>Crée ou met à jour la tâche à partir des propriétés du formulaire.</summary>
+    protected abstract Task<Tache> PersisterAsync(IReadOnlyList<string> nomsCategories);
+
+    /// <summary>Réinitialise/ferme le formulaire après un enregistrement réussi.</summary>
+    protected virtual void ApresEnregistrement()
+    {
+    }
+
+    protected void RemplirDepuis(Tache tache)
+    {
+        Titre = tache.Titre;
+        Description = tache.Description;
+        DateEcheance = tache.DateEcheance;
+        Priorite = tache.Priorite;
+        Statut = tache.Statut;
+        CategoriesTexte = string.Join(", ", tache.Categories.Select(c => c.Nom));
+    }
+
+    private static IReadOnlyList<string> ParseNomsCategories(string? texte) =>
+        (texte ?? string.Empty)
+            .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
+}
