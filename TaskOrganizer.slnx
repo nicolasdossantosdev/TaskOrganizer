@@ -1,13 +1,4 @@
 <Solution>
-  <Folder Name="/src/">
-    <Project Path="src/TaskOrganizer.App/TaskOrganizer.App.csproj" />
-    <Project Path="src/TaskOrganizer.Core/TaskOrganizer.Core.csproj" />
-    <Project Path="src/TaskOrganizer.Data/TaskOrganizer.Data.csproj" />
-    <Project Path="src/TaskOrganizer.Services/TaskOrganizer.Services.csproj" />
-    <Project Path="src/TaskOrganizer.ViewModels/TaskOrganizer.ViewModels.csproj" />
-    <Project Path="src/TaskOrganizer.Views/TaskOrganizer.Views.csproj" />
-  </Folder>
-  <Folder Name="/tests/">
-    <Project Path="tests/TaskOrganizer.Tests/TaskOrganizer.Tests.csproj" />
-  </Folder>
+  <Project Path="TaskOrganizer/TaskOrganizer.csproj" />
+  <Project Path="TaskOrganizer.Tests/TaskOrganizer.Tests.csproj" />
 </Solution>

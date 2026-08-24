@@ -2,7 +2,7 @@
 using System.Data;
 using System.Windows;
 
-namespace TaskOrganizer.App;
+namespace TaskOrganizer;
 
 /// <summary>
 /// Interaction logic for App.xaml

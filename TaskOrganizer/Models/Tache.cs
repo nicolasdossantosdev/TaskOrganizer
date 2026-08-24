@@ -1,7 +1,6 @@
 using System.ComponentModel.DataAnnotations;
-using TaskOrganizer.Core.Enums;
 
-namespace TaskOrganizer.Core.Entites;
+namespace TaskOrganizer.Models;
 
 public class Tache
 {

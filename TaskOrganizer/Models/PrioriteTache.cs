@@ -1,4 +1,4 @@
-namespace TaskOrganizer.Core.Enums;
+namespace TaskOrganizer.Models;
 
 public enum PrioriteTache
 {

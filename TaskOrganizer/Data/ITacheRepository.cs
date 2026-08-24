@@ -1,6 +1,6 @@
-using TaskOrganizer.Core.Entites;
+using TaskOrganizer.Models;
 
-namespace TaskOrganizer.Core.Repositories;
+namespace TaskOrganizer.Data;
 
 public interface ITacheRepository
 {
