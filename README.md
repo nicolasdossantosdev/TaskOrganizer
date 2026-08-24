@@ -6,8 +6,12 @@ pour le contexte produit, le périmètre et les conventions du projet.
 
 ## Statut
 
-Sprint 1 (Fondations) : CRUD de base des tâches, persistance SQLite via EF
-Core, fenêtre principale avec formulaire de création et liste des tâches.
+- **Sprint 1 (Fondations)** : CRUD de base des tâches, persistance SQLite via
+  EF Core, fenêtre principale avec formulaire de création et liste des tâches.
+- **Sprint 2** : édition/suppression de tâche, changement de statut inline,
+  catégories multiples, recherche et tri dans la liste, rappels programmables
+  par tâche avec notifications toast Windows natives et résumé des rappels
+  manqués au démarrage.
 
 ## Prérequis
 
@@ -38,6 +42,11 @@ dotnet run --project TaskOrganizer
 Au premier démarrage, l'application applique automatiquement les migrations
 EF Core et crée la base SQLite dans
 `%LOCALAPPDATA%\TaskOrganizer\taskorganizer.db`.
+
+Les rappels sont scrutés toutes les 30 secondes en arrière-plan et déclenchent
+une notification toast native (Centre de notifications Windows). Un résumé
+des rappels manqués (dus pendant que l'application était fermée) s'affiche
+au démarrage s'il y en a.
 
 ## Lancer les tests
 

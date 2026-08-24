@@ -59,8 +59,16 @@ Views ──> ViewModels ──> Services ──> Data ──> Models
 - `Services` dépend de `Models` et `Data`.
 - `ViewModels` dépend de `Models` et `Services` (jamais de `Data` directement).
 - `Views` dépend de `ViewModels` (uniquement pour le typage du `DataContext`, pas de logique).
-- `App.xaml.cs` est le seul point qui connaît tout : c'est le composition root (DI).
+- `App.xaml.cs` est le seul point qui connaît tout : c'est le composition root (DI),
+  et le seul endroit qui gère le cycle de vie du `RappelBackgroundService`.
 - `TaskOrganizer.Tests` référence le projet `TaskOrganizer` dans son ensemble.
+
+**Exception assumée au sens des dépendances** : `IDialogService` (fenêtre
+d'édition, confirmations, message d'erreur) est *défini* dans `ViewModels`
+mais *implémenté* dans `Views` (`DialogService`, qui ouvre de vraies
+`Window`/`MessageBox`) et injecté via DI. Ça permet à `MainViewModel` de
+rester testable (voir `FakeDialogService` dans les tests) sans connaître
+WPF, tout en gardant l'ouverture de fenêtres du côté Views.
 
 ## Conventions de code
 - Langage du domaine : les entités et le vocabulaire métier restent en **français**
@@ -73,9 +81,15 @@ Views ──> ViewModels ──> Services ──> Data ──> Models
   `[RelayCommand]` de CommunityToolkit.Mvvm plutôt que du code manuel de
   `INotifyPropertyChanged`.
 - Repository pattern : interface et implémentation vivent toutes les deux
-  dans `Data` (`ITacheRepository` / `TacheRepository`). Les couches
+  dans `Data` (`ITacheRepository`/`TacheRepository`, `ICategorieRepository`/
+  `CategorieRepository`, `IRappelRepository`/`RappelRepository`). Les couches
   au-dessus (`Services`, `ViewModels`) dépendent de l'interface, jamais
-  d'EF Core directement.
+  d'EF Core directement. Tous les repositories héritent de `RepositoryBase`
+  (retry sur erreurs SQLite transitoires + `PersistanceException` pour les
+  erreurs définitives, voir Sprint 2).
+- Formulaires de tâche : `TacheFormViewModelBase` centralise validation,
+  parsing des catégories et logique de rappels ; `CreateTacheViewModel` et
+  `EditTacheViewModel` n'implémentent que `PersisterAsync` (Create vs Update).
 - Un dossier par responsabilité (voir structure ci-dessus) ; pas de logique
   métier dans les code-behind XAML.
 - Tests xUnit : un fichier de test par classe testée, structure
@@ -87,9 +101,17 @@ Views ──> ViewModels ──> Services ──> Data ──> Models
 - **Sprint 1 — Fondations** : solution .NET, DI, CommunityToolkit.Mvvm, EF Core
   + SQLite, entité `Tache`, Repository pattern, fenêtre principale (formulaire
   de création + liste), tests unitaires de base, README.
-- **Sprints suivants** (à détailler en temps voulu) : filtres/tri/recherche,
-  vue planning (calendrier + drag & drop), rappels et notifications toast,
-  thème clair/sombre.
+- **Sprint 2 — fin de l'epic Gestion des tâches + epic Reminders & Notifications** :
+  édition et suppression (avec confirmation) d'une tâche, changement de statut
+  inline depuis la liste, catégories multiples (`Categorie`, relation
+  many-to-many), recherche texte + tri dans la liste (`ICollectionView`),
+  rappels programmables par tâche (`Rappel`, offsets 1h avant / la veille / 1
+  semaine avant), `RappelBackgroundService` (scrutation périodique) +
+  notifications toast Windows natives (`Microsoft.Toolkit.Uwp.Notifications`,
+  TFM `net10.0-windows10.0.19041.0`), résumé des rappels manqués au démarrage,
+  fiabilisation de la persistance (`RepositoryBase` : retry + `PersistanceException`).
+- **Sprints suivants** (à détailler en temps voulu) : vue planning (calendrier
+  + drag & drop), thème clair/sombre.
 
 Chaque sprint est traité comme un epic indépendant : ne pas anticiper le
 code des sprints suivants tant qu'il n'a pas été explicitement démarré.
