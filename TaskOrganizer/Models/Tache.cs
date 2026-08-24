@@ -23,6 +23,8 @@ public class Tache
 
     public ICollection<Categorie> Categories { get; set; } = new List<Categorie>();
 
+    public ICollection<Rappel> Rappels { get; set; } = new List<Rappel>();
+
     [NotMapped]
     public string CategoriesAffichees => string.Join(", ", Categories.Select(c => c.Nom));
 }

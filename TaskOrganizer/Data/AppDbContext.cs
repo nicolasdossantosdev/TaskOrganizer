@@ -14,6 +14,8 @@ public class AppDbContext : DbContext
 
     public DbSet<Categorie> Categories => Set<Categorie>();
 
+    public DbSet<Rappel> Rappels => Set<Rappel>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
