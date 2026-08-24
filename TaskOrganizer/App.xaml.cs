@@ -15,8 +15,9 @@ namespace TaskOrganizer;
 public partial class App : Application
 {
     private ServiceProvider? _serviceProvider;
+    private RappelBackgroundService? _rappelBackgroundService;
 
-    protected override void OnStartup(StartupEventArgs e)
+    protected override async void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
 
@@ -30,12 +31,32 @@ public partial class App : Application
             dbContext.Database.Migrate();
         }
 
+        // Rappels dus pendant que l'application était fermée : on les "draine"
+        // en un résumé avant de démarrer la scrutation en direct, pour ne pas
+        // les redéclencher individuellement en tant que toasts.
+        var rappelService = _serviceProvider.GetRequiredService<IRappelService>();
+        var rappelsManques = await rappelService.ObtenirEtMarquerRappelsDusAsync(DateTime.Now);
+
         var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
         mainWindow.Show();
+
+        if (rappelsManques.Count > 0)
+        {
+            var fenetreRappelsManques = new RappelsManquesWindow(rappelsManques) { Owner = mainWindow };
+            fenetreRappelsManques.ShowDialog();
+        }
+
+        _rappelBackgroundService = _serviceProvider.GetRequiredService<RappelBackgroundService>();
+        await _rappelBackgroundService.StartAsync(CancellationToken.None);
     }
 
-    protected override void OnExit(ExitEventArgs e)
+    protected override async void OnExit(ExitEventArgs e)
     {
+        if (_rappelBackgroundService is not null)
+        {
+            await _rappelBackgroundService.StopAsync(CancellationToken.None);
+        }
+
         _serviceProvider?.Dispose();
         base.OnExit(e);
     }
@@ -59,6 +80,7 @@ public partial class App : Application
         services.AddSingleton<IRappelService, RappelService>();
         services.AddSingleton<INotificationService, ToastNotificationService>();
         services.AddSingleton<IDialogService, DialogService>();
+        services.AddSingleton<RappelBackgroundService>();
 
         services.AddTransient<CreateTacheViewModel>();
         services.AddTransient<MainViewModel>();

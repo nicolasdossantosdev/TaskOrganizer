@@ -1,0 +1,22 @@
+<Window x:Class="TaskOrganizer.Views.RappelsManquesWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Rappels manqués" Height="320" Width="420"
+        WindowStartupLocation="CenterOwner">
+    <DockPanel Margin="16">
+        <TextBlock DockPanel.Dock="Top" Margin="0,0,0,8" TextWrapping="Wrap"
+                   Text="Ces rappels étaient dus pendant que l'application était fermée :" />
+        <Button DockPanel.Dock="Bottom" Content="Fermer" HorizontalAlignment="Right" Margin="0,8,0,0"
+                Padding="16,4" Click="FermerButton_Click" />
+        <ListBox ItemsSource="{Binding}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Margin="0,4">
+                        <TextBlock Text="{Binding Tache.Titre}" FontWeight="Bold" />
+                        <TextBlock Text="{Binding DateHeureRappel, StringFormat='Prévu le {0:dd/MM/yyyy HH:mm}'}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </DockPanel>
+</Window>
