@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using TaskOrganizer.Data;
 using TaskOrganizer.Models;
+using TaskOrganizer.Services;
 
 namespace TaskOrganizer.ViewModels;
 
@@ -41,14 +42,26 @@ public abstract partial class TacheFormViewModelBase : ObservableValidator
     [ObservableProperty]
     private string? erreurEnregistrement;
 
+    [ObservableProperty]
+    private bool rappelUneHeureAvant;
+
+    [ObservableProperty]
+    private bool rappelLaVeille;
+
+    [ObservableProperty]
+    private bool rappelUneSemaineAvant;
+
     public IReadOnlyList<PrioriteTache> PrioritesDisponibles { get; } = Enum.GetValues<PrioriteTache>();
 
     public IReadOnlyList<StatutTache> StatutsDisponibles { get; } = Enum.GetValues<StatutTache>();
 
     public event EventHandler<Tache>? TacheEnregistree;
 
-    protected TacheFormViewModelBase()
+    private readonly IRappelService _rappelService;
+
+    protected TacheFormViewModelBase(IRappelService rappelService)
     {
+        _rappelService = rappelService;
         ValidateAllProperties();
     }
 
@@ -68,6 +81,7 @@ public abstract partial class TacheFormViewModelBase : ObservableValidator
             ErreurEnregistrement = null;
             var nomsCategories = ParseNomsCategories(CategoriesTexte);
             var tache = await PersisterAsync(nomsCategories);
+            await _rappelService.DefinirRappelsAsync(tache.Id, tache.DateEcheance, ObtenirOffsetsSelectionnes());
             TacheEnregistree?.Invoke(this, tache);
             ApresEnregistrement();
         }
@@ -93,6 +107,31 @@ public abstract partial class TacheFormViewModelBase : ObservableValidator
         Priorite = tache.Priorite;
         Statut = tache.Statut;
         CategoriesTexte = string.Join(", ", tache.Categories.Select(c => c.Nom));
+
+        RappelUneHeureAvant = tache.Rappels.Any(r => r.Offset == OffsetRappel.UneHeureAvant);
+        RappelLaVeille = tache.Rappels.Any(r => r.Offset == OffsetRappel.LaVeille);
+        RappelUneSemaineAvant = tache.Rappels.Any(r => r.Offset == OffsetRappel.UneSemaineAvant);
+    }
+
+    private IReadOnlyList<OffsetRappel> ObtenirOffsetsSelectionnes()
+    {
+        var offsets = new List<OffsetRappel>();
+        if (RappelUneHeureAvant)
+        {
+            offsets.Add(OffsetRappel.UneHeureAvant);
+        }
+
+        if (RappelLaVeille)
+        {
+            offsets.Add(OffsetRappel.LaVeille);
+        }
+
+        if (RappelUneSemaineAvant)
+        {
+            offsets.Add(OffsetRappel.UneSemaineAvant);
+        }
+
+        return offsets;
     }
 
     private static IReadOnlyList<string> ParseNomsCategories(string? texte) =>

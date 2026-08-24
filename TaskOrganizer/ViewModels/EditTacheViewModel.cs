@@ -9,7 +9,12 @@ public partial class EditTacheViewModel : TacheFormViewModelBase
     private readonly ICategorieService _categorieService;
     private readonly int _tacheId;
 
-    public EditTacheViewModel(Tache tache, ITacheService tacheService, ICategorieService categorieService)
+    public EditTacheViewModel(
+        Tache tache,
+        ITacheService tacheService,
+        ICategorieService categorieService,
+        IRappelService rappelService)
+        : base(rappelService)
     {
         _tacheService = tacheService;
         _categorieService = categorieService;

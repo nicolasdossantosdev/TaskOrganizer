@@ -9,16 +9,18 @@ public class DialogService : IDialogService
 {
     private readonly ITacheService _tacheService;
     private readonly ICategorieService _categorieService;
+    private readonly IRappelService _rappelService;
 
-    public DialogService(ITacheService tacheService, ICategorieService categorieService)
+    public DialogService(ITacheService tacheService, ICategorieService categorieService, IRappelService rappelService)
     {
         _tacheService = tacheService;
         _categorieService = categorieService;
+        _rappelService = rappelService;
     }
 
     public bool OuvrirFenetreEdition(Tache tache)
     {
-        var viewModel = new EditTacheViewModel(tache, _tacheService, _categorieService);
+        var viewModel = new EditTacheViewModel(tache, _tacheService, _categorieService, _rappelService);
         var fenetre = new EditTacheWindow(viewModel)
         {
             Owner = Application.Current.MainWindow,

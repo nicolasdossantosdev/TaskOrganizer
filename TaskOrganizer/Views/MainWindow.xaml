@@ -57,6 +57,13 @@
                     <TextBox Text="{Binding CategoriesTexte, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
 
+                <StackPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Margin="4" VerticalAlignment="Bottom" Orientation="Horizontal">
+                    <TextBlock Text="Rappels :" VerticalAlignment="Center" Margin="0,0,8,0" />
+                    <CheckBox Content="1h avant" IsChecked="{Binding RappelUneHeureAvant}" Margin="0,0,12,0" VerticalAlignment="Center" />
+                    <CheckBox Content="La veille" IsChecked="{Binding RappelLaVeille}" Margin="0,0,12,0" VerticalAlignment="Center" />
+                    <CheckBox Content="1 semaine avant" IsChecked="{Binding RappelUneSemaineAvant}" VerticalAlignment="Center" />
+                </StackPanel>
+
                 <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" Margin="4">
                     <TextBlock Text="{Binding ErreurEnregistrement}" Foreground="Red" TextWrapping="Wrap" />
                 </StackPanel>

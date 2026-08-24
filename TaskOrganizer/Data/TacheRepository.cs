@@ -15,6 +15,7 @@ public class TacheRepository : RepositoryBase, ITacheRepository
             async context => await context.Taches
                 .AsNoTracking()
                 .Include(t => t.Categories)
+                .Include(t => t.Rappels)
                 .OrderBy(t => t.DateEcheance)
                 .ToListAsync(cancellationToken),
             cancellationToken);
@@ -23,6 +24,7 @@ public class TacheRepository : RepositoryBase, ITacheRepository
         ExecuterAsync(
             async context => await context.Taches
                 .Include(t => t.Categories)
+                .Include(t => t.Rappels)
                 .FirstOrDefaultAsync(t => t.Id == id, cancellationToken),
             cancellationToken);
 

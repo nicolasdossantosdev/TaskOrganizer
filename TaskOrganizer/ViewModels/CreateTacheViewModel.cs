@@ -8,7 +8,8 @@ public partial class CreateTacheViewModel : TacheFormViewModelBase
     private readonly ITacheService _tacheService;
     private readonly ICategorieService _categorieService;
 
-    public CreateTacheViewModel(ITacheService tacheService, ICategorieService categorieService)
+    public CreateTacheViewModel(ITacheService tacheService, ICategorieService categorieService, IRappelService rappelService)
+        : base(rappelService)
     {
         _tacheService = tacheService;
         _categorieService = categorieService;
@@ -42,5 +43,8 @@ public partial class CreateTacheViewModel : TacheFormViewModelBase
         Priorite = PrioriteTache.Normale;
         Statut = StatutTache.ATraiter;
         CategoriesTexte = null;
+        RappelUneHeureAvant = false;
+        RappelLaVeille = false;
+        RappelUneSemaineAvant = false;
     }
 }

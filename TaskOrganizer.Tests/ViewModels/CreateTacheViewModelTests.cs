@@ -1,15 +1,21 @@
 using TaskOrganizer.Models;
-using TaskOrganizer.Services;
+using TaskOrganizer.Tests.Fakes;
 using TaskOrganizer.ViewModels;
 
 namespace TaskOrganizer.Tests.ViewModels;
 
 public class CreateTacheViewModelTests
 {
+    private static CreateTacheViewModel CreerViewModel(
+        FakeTacheService? tacheService = null,
+        FakeCategorieService? categorieService = null,
+        FakeRappelService? rappelService = null) =>
+        new(tacheService ?? new FakeTacheService(), categorieService ?? new FakeCategorieService(), rappelService ?? new FakeRappelService());
+
     [Fact]
     public void Constructeur_FormulaireVide_EnregistrerCommandEstDesactivee()
     {
-        var viewModel = new CreateTacheViewModel(new FakeTacheService(), new FakeCategorieService());
+        var viewModel = CreerViewModel();
 
         Assert.False(viewModel.EnregistrerCommand.CanExecute(null));
     }
@@ -17,10 +23,8 @@ public class CreateTacheViewModelTests
     [Fact]
     public void Titre_ViseVide_ProduitUneErreurDeValidation()
     {
-        var viewModel = new CreateTacheViewModel(new FakeTacheService(), new FakeCategorieService())
-        {
-            Titre = "Temporaire",
-        };
+        var viewModel = CreerViewModel();
+        viewModel.Titre = "Temporaire";
 
         viewModel.Titre = string.Empty;
 
@@ -30,11 +34,9 @@ public class CreateTacheViewModelTests
     [Fact]
     public void ChampsObligatoiresRenseignes_EnregistrerCommandEstActivee()
     {
-        var viewModel = new CreateTacheViewModel(new FakeTacheService(), new FakeCategorieService())
-        {
-            Titre = "Faire les courses",
-            DateEcheance = DateTime.Today.AddDays(1),
-        };
+        var viewModel = CreerViewModel();
+        viewModel.Titre = "Faire les courses";
+        viewModel.DateEcheance = DateTime.Today.AddDays(1);
 
         Assert.True(viewModel.EnregistrerCommand.CanExecute(null));
     }
@@ -43,18 +45,16 @@ public class CreateTacheViewModelTests
     public async Task EnregistrerAsync_FormulaireValide_AppelleLeServiceEtReinitialiseLeFormulaire()
     {
         var service = new FakeTacheService();
-        var viewModel = new CreateTacheViewModel(service, new FakeCategorieService())
-        {
-            Titre = "Faire les courses",
-            Description = "Lait, oeufs",
-            DateEcheance = DateTime.Today.AddDays(1),
-            CategoriesTexte = "Maison",
-        };
+        var viewModel = CreerViewModel(service);
+        viewModel.Titre = "Faire les courses";
+        viewModel.Description = "Lait, oeufs";
+        viewModel.DateEcheance = DateTime.Today.AddDays(1);
+        viewModel.CategoriesTexte = "Maison";
 
         await viewModel.EnregistrerCommand.ExecuteAsync(null);
 
-        Assert.Single(service.TachesCreees);
-        Assert.Equal("Faire les courses", service.TachesCreees[0].Titre);
+        Assert.Single(service.Taches);
+        Assert.Equal("Faire les courses", service.Taches[0].Titre);
         Assert.Equal(string.Empty, viewModel.Titre);
         Assert.Null(viewModel.DateEcheance);
     }
@@ -62,11 +62,9 @@ public class CreateTacheViewModelTests
     [Fact]
     public async Task EnregistrerAsync_FormulaireValide_DeclencheEvenementTacheCreee()
     {
-        var viewModel = new CreateTacheViewModel(new FakeTacheService(), new FakeCategorieService())
-        {
-            Titre = "Faire les courses",
-            DateEcheance = DateTime.Today.AddDays(1),
-        };
+        var viewModel = CreerViewModel();
+        viewModel.Titre = "Faire les courses";
+        viewModel.DateEcheance = DateTime.Today.AddDays(1);
 
         Tache? tacheRecue = null;
         viewModel.TacheEnregistree += (_, tache) => tacheRecue = tache;
@@ -81,61 +79,30 @@ public class CreateTacheViewModelTests
     public async Task EnregistrerAsync_FormulaireInvalide_NAppellePasLeService()
     {
         var service = new FakeTacheService();
-        var viewModel = new CreateTacheViewModel(service, new FakeCategorieService());
+        var viewModel = CreerViewModel(service);
 
         await viewModel.EnregistrerCommand.ExecuteAsync(null);
 
-        Assert.Empty(service.TachesCreees);
+        Assert.Empty(service.Taches);
     }
 
-    private sealed class FakeTacheService : ITacheService
+    [Fact]
+    public async Task EnregistrerAsync_AvecRappelsCoches_DefinitLesRappelsSurLaTache()
     {
-        public List<Tache> TachesCreees { get; } = new();
+        var tacheService = new FakeTacheService();
+        var rappelService = new FakeRappelService();
+        var viewModel = CreerViewModel(tacheService, rappelService: rappelService);
+        viewModel.Titre = "Faire les courses";
+        viewModel.DateEcheance = DateTime.Today.AddDays(1);
+        viewModel.RappelLaVeille = true;
+        viewModel.RappelUneHeureAvant = true;
 
-        public Task<IReadOnlyList<Tache>> ObtenirToutesAsync(CancellationToken cancellationToken = default)
-            => Task.FromResult<IReadOnlyList<Tache>>(TachesCreees);
+        await viewModel.EnregistrerCommand.ExecuteAsync(null);
 
-        public Task<Tache?> ObtenirParIdAsync(int id, CancellationToken cancellationToken = default)
-            => Task.FromResult(TachesCreees.FirstOrDefault(t => t.Id == id));
-
-        public Task<Tache> CreerAsync(Tache tache, CancellationToken cancellationToken = default)
-        {
-            tache.Id = TachesCreees.Count + 1;
-            TachesCreees.Add(tache);
-            return Task.FromResult(tache);
-        }
-
-        public Task ModifierAsync(Tache tache, CancellationToken cancellationToken = default)
-        {
-            var index = TachesCreees.FindIndex(t => t.Id == tache.Id);
-            if (index >= 0)
-            {
-                TachesCreees[index] = tache;
-            }
-
-            return Task.CompletedTask;
-        }
-
-        public Task SupprimerAsync(int id, CancellationToken cancellationToken = default)
-        {
-            TachesCreees.RemoveAll(t => t.Id == id);
-            return Task.CompletedTask;
-        }
-    }
-
-    private sealed class FakeCategorieService : ICategorieService
-    {
-        public Task<IReadOnlyList<Categorie>> ObtenirToutesAsync(CancellationToken cancellationToken = default)
-            => Task.FromResult<IReadOnlyList<Categorie>>(new List<Categorie>());
-
-        public Task<IReadOnlyList<Categorie>> ObtenirOuCreerAsync(
-            IReadOnlyList<string> noms,
-            CancellationToken cancellationToken = default)
-        {
-            var categories = noms
-                .Select((nom, index) => new Categorie { Id = index + 1, Nom = nom })
-                .ToList();
-            return Task.FromResult<IReadOnlyList<Categorie>>(categories);
-        }
+        var tacheId = tacheService.Taches[0].Id;
+        var offsets = rappelService.RappelsParTache[tacheId];
+        Assert.Equal(2, offsets.Count);
+        Assert.Contains(OffsetRappel.LaVeille, offsets);
+        Assert.Contains(OffsetRappel.UneHeureAvant, offsets);
     }
 }
