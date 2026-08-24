@@ -37,6 +37,15 @@ public abstract class RepositoryBase
             {
                 await Task.Delay(TimeSpan.FromMilliseconds(200 * tentative), cancellationToken);
             }
+            // EF Core enveloppe les erreurs survenues pendant SaveChangesAsync dans une
+            // DbUpdateException : un verrouillage SQLite transitoire (ex. le
+            // RappelBackgroundService qui scrute/écrit en tâche de fond toutes les 30s,
+            // voir App.xaml.cs) remonte donc ici plutôt que comme SqliteException brute,
+            // et doit être retenté comme les autres erreurs transitoires.
+            catch (DbUpdateException ex) when (ex.InnerException is SqliteException inner && EstErreurTransitoire(inner) && tentative < MaxTentatives)
+            {
+                await Task.Delay(TimeSpan.FromMilliseconds(200 * tentative), cancellationToken);
+            }
             catch (DbUpdateException ex)
             {
                 throw new PersistanceException(
