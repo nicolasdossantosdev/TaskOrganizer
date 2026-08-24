@@ -16,6 +16,8 @@ public partial class MainViewModel : ObservableObject
 
     public CreateTacheViewModel CreateTacheViewModel { get; }
 
+    public PlanningViewModel PlanningViewModel { get; }
+
     public ObservableCollection<Tache> Taches { get; } = new();
 
     public ICollectionView TachesAffichees { get; }
@@ -33,12 +35,19 @@ public partial class MainViewModel : ObservableObject
     public MainViewModel(
         ITacheService tacheService,
         IDialogService dialogService,
-        CreateTacheViewModel createTacheViewModel)
+        CreateTacheViewModel createTacheViewModel,
+        PlanningViewModel planningViewModel)
     {
         _tacheService = tacheService;
         _dialogService = dialogService;
         CreateTacheViewModel = createTacheViewModel;
-        CreateTacheViewModel.TacheEnregistree += (_, tache) => Taches.Insert(0, tache);
+        PlanningViewModel = planningViewModel;
+        CreateTacheViewModel.TacheEnregistree += (_, tache) =>
+        {
+            Taches.Insert(0, tache);
+            PlanningViewModel.ChargerCommand.ExecuteAsync(null);
+        };
+        PlanningViewModel.TacheReplanifiee += (_, _) => ChargerCommand.ExecuteAsync(null);
 
         TachesAffichees = CollectionViewSource.GetDefaultView(Taches);
         TachesAffichees.Filter = FiltrerTache;
@@ -74,6 +83,7 @@ public partial class MainViewModel : ObservableObject
         if (_dialogService.OuvrirFenetreEdition(tache))
         {
             ChargerCommand.ExecuteAsync(null);
+            PlanningViewModel.ChargerCommand.ExecuteAsync(null);
         }
     }
 
@@ -89,6 +99,7 @@ public partial class MainViewModel : ObservableObject
         {
             await _tacheService.SupprimerAsync(tache.Id);
             Taches.Remove(tache);
+            await PlanningViewModel.ChargerCommand.ExecuteAsync(null);
         }
         catch (PersistanceException ex)
         {
@@ -107,6 +118,7 @@ public partial class MainViewModel : ObservableObject
         try
         {
             await _tacheService.ModifierAsync(tache);
+            await PlanningViewModel.ChargerCommand.ExecuteAsync(null);
         }
         catch (PersistanceException ex)
         {

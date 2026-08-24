@@ -84,6 +84,7 @@ public partial class App : Application
         services.AddSingleton<RappelBackgroundService>();
 
         services.AddTransient<CreateTacheViewModel>();
+        services.AddTransient<PlanningViewModel>();
         services.AddTransient<MainViewModel>();
         services.AddTransient<MainWindow>();
     }

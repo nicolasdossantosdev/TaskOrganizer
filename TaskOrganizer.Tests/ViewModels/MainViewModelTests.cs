@@ -1,4 +1,5 @@
 using TaskOrganizer.Models;
+using TaskOrganizer.Services;
 using TaskOrganizer.Tests.Fakes;
 using TaskOrganizer.ViewModels;
 
@@ -11,8 +12,10 @@ public class MainViewModelTests
         FakeDialogService? dialogService = null)
     {
         tacheService ??= new FakeTacheService();
+        dialogService ??= new FakeDialogService();
         var createTacheViewModel = new CreateTacheViewModel(tacheService, new FakeCategorieService(), new FakeRappelService());
-        return new MainViewModel(tacheService, dialogService ?? new FakeDialogService(), createTacheViewModel);
+        var planningViewModel = new PlanningViewModel(tacheService, new PlanningService(), dialogService);
+        return new MainViewModel(tacheService, dialogService, createTacheViewModel, planningViewModel);
     }
 
     [Fact]
