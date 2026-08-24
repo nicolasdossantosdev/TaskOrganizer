@@ -4,7 +4,7 @@
         xmlns:views="clr-namespace:TaskOrganizer.Views"
         Title="TaskOrganizer" Height="650" Width="1050"
         MinHeight="500" MinWidth="800"
-        Icon="Resources/AppIcon.ico">
+        Icon="/Resources/AppIcon.ico">
     <Window.Resources>
         <Style x:Key="StyleOngletAvecIcone" TargetType="TextBlock">
             <Setter Property="FontFamily" Value="Segoe Fluent Icons, Segoe MDL2 Assets" />
