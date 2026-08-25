@@ -88,6 +88,29 @@ public class TacheRepositoryTests : IDisposable
     }
 
     [Fact]
+    public async Task AddAsync_AvecCategoriesDejaPersistees_NEssaiePasDeLesReinserer()
+    {
+        // Reproduit le flux réel : ICategorieService.ObtenirOuCreerAsync persiste les
+        // catégories via son propre DbContext (ici simulé par un second repository),
+        // donc les instances retournées sont détachées du DbContext qu'AddAsync utilisera.
+        var categorieRepository = new CategorieRepository(new TestDbContextFactory(_options));
+        var categories = await categorieRepository.GetOrCreateByNomsAsync(new[] { "Maison", "Urgent" });
+
+        var tache = new Tache { Titre = "Avec catégories", DateEcheance = DateTime.Today };
+        foreach (var categorie in categories)
+        {
+            tache.Categories.Add(categorie);
+        }
+
+        var ajoutee = await _repository.AddAsync(tache);
+
+        var recuperee = await _repository.GetByIdAsync(ajoutee.Id);
+        Assert.Equal(2, recuperee!.Categories.Count);
+        Assert.Contains(recuperee.Categories, c => c.Nom == "Maison");
+        Assert.Contains(recuperee.Categories, c => c.Nom == "Urgent");
+    }
+
+    [Fact]
     public async Task UpdateAsync_AvecCategories_RemplaceLesCategoriesExistantes()
     {
         var categorieRepository = new CategorieRepository(new TestDbContextFactory(_options));
