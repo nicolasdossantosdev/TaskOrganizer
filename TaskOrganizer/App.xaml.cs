@@ -1,5 +1,8 @@
+using System.Globalization;
 using System.IO;
+using System.Threading;
 using System.Windows;
+using System.Windows.Markup;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using TaskOrganizer.Data;
@@ -19,6 +22,22 @@ public partial class App : Application
 
     protected override async void OnStartup(StartupEventArgs e)
     {
+        // Le domaine est en français (voir CLAUDE.md) ; on fixe la culture du
+        // thread UI plutôt que de dépendre de la culture système de la machine,
+        // pour un affichage cohérent (DatePicker, formats de date/nombre, etc.)
+        // quel que soit l'environnement d'exécution. DefaultThreadCurrentCulture
+        // ne s'applique qu'aux threads créés après son affectation : le thread UI
+        // existe déjà à ce stade, il faut donc aussi affecter CurrentCulture
+        // directement dessus.
+        var cultureFrancaise = new CultureInfo("fr-FR");
+        CultureInfo.DefaultThreadCurrentCulture = cultureFrancaise;
+        CultureInfo.DefaultThreadCurrentUICulture = cultureFrancaise;
+        Thread.CurrentThread.CurrentCulture = cultureFrancaise;
+        Thread.CurrentThread.CurrentUICulture = cultureFrancaise;
+        FrameworkElement.LanguageProperty.OverrideMetadata(
+            typeof(FrameworkElement),
+            new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(cultureFrancaise.IetfLanguageTag)));
+
         base.OnStartup(e);
 
         var services = new ServiceCollection();
