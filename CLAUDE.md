@@ -119,7 +119,27 @@ WPF, tout en gardant l'ouverture de fenêtres du côté Views.
   mémoire sur `PersistanceException`). "Aujourd'hui" et "À venir" sont des
   modes de la même vue plutôt que des écrans séparés, pour ne pas dupliquer
   le rendu ni la logique de regroupement par jour.
-- **Sprints suivants** (à détailler en temps voulu) : thème clair/sombre.
+- **Sprint 4 — UI/UX + Qualité & Livraison** : thème clair/sombre/système via
+  `Application.ThemeMode` (`IThemeService`/`ThemeService`, expérimental
+  WPF0001 assumé — retheme automatique de tous les contrôles standards, voir
+  commentaire dans `TaskOrganizer.csproj`), `IParametresService`/
+  `ParametresService` (préférences persistées en JSON dans
+  `%LOCALAPPDATA%`, séparément de la base SQLite), onglet Paramètres
+  (thème + son des notifications + export/import), icône applicative et
+  icônes Segoe Fluent sur les onglets/boutons d'action, animations légères
+  (fondu des lignes de tâches à l'ajout, fondu au changement d'onglet),
+  export/import JSON/CSV (`IExportImportService`/`ExportImportService`,
+  réutilise `ITacheService`/`ICategorieService`, jamais d'accès direct à
+  `Data`), pipeline CI GitHub Actions (`.github/workflows/ci.yml`, build +
+  tests sur `windows-latest`), complément de couverture de tests (Services,
+  Repositories, ViewModels restants). Deux bugs de persistance des
+  catégories identifiés et corrigés en testant manuellement l'application
+  packagée (pas seulement `dotnet test`) : `TacheRepository.AddAsync`
+  n'attachait pas les catégories déjà persistées (violation de clé primaire
+  à la création), et `UpdateAsync` provoquait un plantage de l'application
+  (conflit de suivi EF Core sur `Tache` via le graphe `Categorie.Taches`) —
+  voir `RattacherCategoriesExistantes` dans `TacheRepository`. Installateur
+  (MSIX/setup.exe) reporté à un sprint ultérieur (décision explicite).
 
 Chaque sprint est traité comme un epic indépendant : ne pas anticiper le
 code des sprints suivants tant qu'il n'a pas été explicitement démarré.
