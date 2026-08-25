@@ -40,14 +40,19 @@
 
                 <ItemsControl.ItemTemplate>
                     <DataTemplate DataType="{x:Type models:JourPlanning}">
-                        <Border BorderBrush="#DDDDDD" BorderThickness="1" Margin="2" Padding="4" MinHeight="110"
+                        <!-- Couleurs via SystemColors (DynamicResource) plutôt que des couleurs
+                             figées : WPF met à jour ces ressources avec Application.ThemeMode,
+                             donc la carte reste lisible en thème clair comme sombre (voir
+                             CLAUDE.md, Sprint 4). -->
+                        <Border BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
+                                BorderThickness="1" Margin="2" Padding="4" MinHeight="110"
                                 AllowDrop="True" Drop="JourCard_Drop">
                             <Border.Style>
                                 <Style TargetType="Border">
-                                    <Setter Property="Background" Value="White" />
+                                    <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding EstAujourdhui}" Value="True">
-                                            <Setter Property="Background" Value="#FFF6D9" />
+                                            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding EstDansLaPeriodePrincipale}" Value="False">
                                             <Setter Property="Opacity" Value="0.45" />
@@ -56,16 +61,28 @@
                                 </Style>
                             </Border.Style>
                             <DockPanel>
-                                <TextBlock DockPanel.Dock="Top" Text="{Binding Date, StringFormat=dd/MM}" FontWeight="Bold" Margin="0,0,0,4" />
+                                <TextBlock DockPanel.Dock="Top" Text="{Binding Date, StringFormat=dd/MM}" FontWeight="Bold" Margin="0,0,0,4">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding EstAujourdhui}" Value="True">
+                                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
                                 <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="150">
                                     <ItemsControl ItemsSource="{Binding Taches}">
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate DataType="{x:Type models:Tache}">
-                                                <Border Background="#EAF1FF" CornerRadius="3" Margin="0,0,0,2" Padding="4,2"
+                                                <Border Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" CornerRadius="3" Margin="0,0,0,2" Padding="4,2"
                                                         Cursor="Hand"
                                                         PreviewMouseLeftButtonDown="TacheChip_PreviewMouseLeftButtonDown"
                                                         MouseMove="TacheChip_MouseMove">
-                                                    <TextBlock Text="{Binding Titre}" TextWrapping="Wrap" ToolTip="{Binding Titre}" FontSize="12" />
+                                                    <TextBlock Text="{Binding Titre}" TextWrapping="Wrap" ToolTip="{Binding Titre}" FontSize="12"
+                                                               Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
                                                 </Border>
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>
