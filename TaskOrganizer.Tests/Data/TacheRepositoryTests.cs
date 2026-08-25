@@ -111,6 +111,34 @@ public class TacheRepositoryTests : IDisposable
     }
 
     [Fact]
+    public async Task UpdateAsync_SurTacheRechargeeViaGetAllAsync_NeLevePasDeConflitDeSuivi()
+    {
+        // Reproduit le flux réel de MainViewModel.ChangerStatutAsync : la tâche vient
+        // d'une lecture AsNoTracking().Include(t => t.Categories) (GetAllAsync), pas
+        // d'un objet fraîchement créé en mémoire. EF Core peut alors avoir "fixup" la
+        // collection inverse Categorie.Taches ; rattacher cette Categorie telle quelle
+        // provoquait un conflit d'identité sur Tache et faisait planter l'application.
+        var categorieRepository = new CategorieRepository(new TestDbContextFactory(_options));
+        var categories = await categorieRepository.GetOrCreateByNomsAsync(new[] { "Maison" });
+        var tache = new Tache { Titre = "Avec catégories", DateEcheance = DateTime.Today };
+        foreach (var categorie in categories)
+        {
+            tache.Categories.Add(categorie);
+        }
+        await _repository.AddAsync(tache);
+
+        var toutes = await _repository.GetAllAsync();
+        var recuperee = toutes.Single();
+        recuperee.Statut = StatutTache.Terminee;
+
+        await _repository.UpdateAsync(recuperee);
+
+        var apresModification = await _repository.GetByIdAsync(recuperee.Id);
+        Assert.Equal(StatutTache.Terminee, apresModification!.Statut);
+        Assert.Single(apresModification.Categories);
+    }
+
+    [Fact]
     public async Task UpdateAsync_AvecCategories_RemplaceLesCategoriesExistantes()
     {
         var categorieRepository = new CategorieRepository(new TestDbContextFactory(_options));
