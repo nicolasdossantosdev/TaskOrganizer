@@ -11,7 +11,7 @@ namespace TaskOrganizer.ViewModels;
 
 public partial class MainViewModel : ObservableObject
 {
-    private readonly ITacheService _tacheService;
+    private readonly ITacheService _tacheService; 
     private readonly IDialogService _dialogService;
 
     public CreateTacheViewModel CreateTacheViewModel { get; }

@@ -2,8 +2,9 @@ using System.Windows;
 using TaskOrganizer.Models;
 using TaskOrganizer.Services;
 using TaskOrganizer.ViewModels;
+using TaskOrganizer.Views;
 
-namespace TaskOrganizer.Views;
+namespace TaskOrganizer.Infrastructure;
 
 public class DialogService : IDialogService
 {

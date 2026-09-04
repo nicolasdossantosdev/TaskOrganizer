@@ -2,7 +2,7 @@ using System.Windows;
 using TaskOrganizer.Models;
 using TaskOrganizer.ViewModels;
 
-namespace TaskOrganizer.Views;
+namespace TaskOrganizer.Infrastructure;
 
 public class ThemeService : IThemeService
 {

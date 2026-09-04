@@ -6,6 +6,7 @@ using System.Windows.Markup;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using TaskOrganizer.Data;
+using TaskOrganizer.Infrastructure;
 using TaskOrganizer.Services;
 using TaskOrganizer.ViewModels;
 using TaskOrganizer.Views;
