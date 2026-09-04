@@ -1,3 +1,9 @@
+/*
+ * Task Organizer
+ * Copyright (c) 2026 Nicolas Dos Santos
+ * Licensed under the MIT License
+ */
+
 using System.IO;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;

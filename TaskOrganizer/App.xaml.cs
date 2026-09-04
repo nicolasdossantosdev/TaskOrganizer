@@ -1,3 +1,9 @@
+/*
+ * Task Organizer
+ * Copyright (c) 2026 Nicolas Dos Santos
+ * Licensed under the MIT License
+ */
+
 using System.Globalization;
 using System.IO;
 using System.Threading;

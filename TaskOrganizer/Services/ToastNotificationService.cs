@@ -1,3 +1,9 @@
+/*
+ * Task Organizer
+ * Copyright (c) 2026 Nicolas Dos Santos
+ * Licensed under the MIT License
+ */
+
 using Microsoft.Toolkit.Uwp.Notifications;
 using TaskOrganizer.Models;
 
