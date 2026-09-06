@@ -6,6 +6,7 @@
 
 namespace TaskOrganizer.Models;
 
+/// <summary>User-persisted application settings.</summary>
 public class Parametres
 {
     public ThemeApplication Theme { get; set; } = ThemeApplication.Systeme;

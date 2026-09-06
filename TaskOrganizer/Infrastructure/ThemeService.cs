@@ -10,6 +10,9 @@ using TaskOrganizer.ViewModels;
 
 namespace TaskOrganizer.Infrastructure;
 
+/// <summary>
+/// Applies the selected application theme via WPF's <c>ThemeMode</c>.
+/// </summary>
 public class ThemeService : IThemeService
 {
     public void Appliquer(ThemeApplication theme)

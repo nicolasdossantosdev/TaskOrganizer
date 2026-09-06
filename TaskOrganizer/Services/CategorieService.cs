@@ -9,6 +9,7 @@ using TaskOrganizer.Models;
 
 namespace TaskOrganizer.Services;
 
+/// <summary>Business logic for task categories.</summary>
 public class CategorieService : ICategorieService
 {
     private readonly ICategorieRepository _categorieRepository;

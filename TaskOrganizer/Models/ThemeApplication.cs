@@ -6,6 +6,7 @@
 
 namespace TaskOrganizer.Models;
 
+/// <summary>Selectable application theme.</summary>
 public enum ThemeApplication
 {
     Systeme,

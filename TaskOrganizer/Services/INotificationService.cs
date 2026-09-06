@@ -8,6 +8,7 @@ using TaskOrganizer.Models;
 
 namespace TaskOrganizer.Services;
 
+/// <summary>Displays reminder notifications to the user.</summary>
 public interface INotificationService
 {
     void AfficherRappel(Rappel rappel);

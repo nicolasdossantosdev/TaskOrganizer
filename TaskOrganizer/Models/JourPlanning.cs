@@ -6,7 +6,7 @@
 
 namespace TaskOrganizer.Models;
 
-/// <summary>Projection d'un jour du planning : sa date et les tâches dont l'échéance tombe ce jour-là.</summary>
+/// <summary>Projection of one planning day: its date and the tasks due that day.</summary>
 public class JourPlanning
 {
     public JourPlanning(DateTime date, IReadOnlyList<Tache> taches, bool estDansLaPeriodePrincipale = true)
@@ -21,8 +21,8 @@ public class JourPlanning
     public IReadOnlyList<Tache> Taches { get; }
 
     /// <summary>
-    /// False pour les jours de "padding" affichés en vue Mois (fin du mois
-    /// précédent / début du mois suivant, pour compléter des semaines entières).
+    /// False for "padding" days shown in Month view (end of previous month /
+    /// start of next month, to fill out whole weeks).
     /// </summary>
     public bool EstDansLaPeriodePrincipale { get; }
 

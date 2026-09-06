@@ -6,12 +6,13 @@
 
 namespace TaskOrganizer.Services;
 
+/// <summary>Export/import of tasks to/from JSON and CSV.</summary>
 public interface IExportImportService
 {
     Task ExporterJsonAsync(string cheminFichier, CancellationToken cancellationToken = default);
 
     Task ExporterCsvAsync(string cheminFichier, CancellationToken cancellationToken = default);
 
-    /// <summary>Importe les tâches du fichier JSON (format produit par <see cref="ExporterJsonAsync"/>) et retourne le nombre de tâches créées.</summary>
+    /// <summary>Imports tasks from the JSON file (format produced by <see cref="ExporterJsonAsync"/>) and returns the number of tasks created.</summary>
     Task<int> ImporterJsonAsync(string cheminFichier, CancellationToken cancellationToken = default);
 }

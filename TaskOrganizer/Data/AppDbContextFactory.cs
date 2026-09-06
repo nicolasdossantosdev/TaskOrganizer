@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Design;
 namespace TaskOrganizer.Data;
 
 /// <summary>
-/// Used by the `dotnet ef` tooling to create migrations without needing the
-/// full DI-configured application to run.
+/// Design-time factory used by `dotnet ef` to create migrations without the
+/// full DI-configured application.
 /// </summary>
 public class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
 {

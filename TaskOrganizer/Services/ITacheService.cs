@@ -8,6 +8,7 @@ using TaskOrganizer.Models;
 
 namespace TaskOrganizer.Services;
 
+/// <summary>Business logic for tasks.</summary>
 public interface ITacheService
 {
     Task<IReadOnlyList<Tache>> ObtenirToutesAsync(CancellationToken cancellationToken = default);

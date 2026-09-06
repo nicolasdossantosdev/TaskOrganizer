@@ -8,6 +8,9 @@ using TaskOrganizer.Models;
 
 namespace TaskOrganizer.Data;
 
+/// <summary>
+/// Data access for task categories.
+/// </summary>
 public interface ICategorieRepository
 {
     Task<IReadOnlyList<Categorie>> GetAllAsync(CancellationToken cancellationToken = default);

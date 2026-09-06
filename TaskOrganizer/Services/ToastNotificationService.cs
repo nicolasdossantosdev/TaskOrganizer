@@ -9,7 +9,7 @@ using TaskOrganizer.Models;
 
 namespace TaskOrganizer.Services;
 
-/// <summary>Notifications toast Windows natives (Centre de notifications), via Microsoft.Toolkit.Uwp.Notifications.</summary>
+/// <summary>Native Windows toast notifications (Notification Center), via Microsoft.Toolkit.Uwp.Notifications.</summary>
 public class ToastNotificationService : INotificationService
 {
     private readonly IParametresService _parametresService;

@@ -9,6 +9,9 @@ using TaskOrganizer.Models;
 
 namespace TaskOrganizer.Data;
 
+/// <summary>
+/// EF Core-backed implementation of <see cref="ICategorieRepository"/>.
+/// </summary>
 public class CategorieRepository : RepositoryBase, ICategorieRepository
 {
     public CategorieRepository(IDbContextFactory<AppDbContext> contextFactory)

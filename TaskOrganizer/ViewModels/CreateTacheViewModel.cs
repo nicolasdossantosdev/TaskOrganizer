@@ -9,6 +9,7 @@ using TaskOrganizer.Services;
 
 namespace TaskOrganizer.ViewModels;
 
+/// <summary>Task creation form ViewModel — the Create half of <see cref="TacheFormViewModelBase"/>.</summary>
 public partial class CreateTacheViewModel : TacheFormViewModelBase
 {
     private readonly ITacheService _tacheService;

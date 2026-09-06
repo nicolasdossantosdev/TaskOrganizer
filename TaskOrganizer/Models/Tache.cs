@@ -9,6 +9,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TaskOrganizer.Models;
 
+/// <summary>Task entity — the core domain object.</summary>
 public class Tache
 {
     public int Id { get; set; }

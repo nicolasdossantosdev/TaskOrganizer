@@ -9,6 +9,9 @@ using TaskOrganizer.Models;
 
 namespace TaskOrganizer.Data;
 
+/// <summary>
+/// EF Core-backed implementation of <see cref="IRappelRepository"/>.
+/// </summary>
 public class RappelRepository : RepositoryBase, IRappelRepository
 {
     public RappelRepository(IDbContextFactory<AppDbContext> contextFactory)

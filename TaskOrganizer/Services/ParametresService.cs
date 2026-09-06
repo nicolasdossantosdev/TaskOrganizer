@@ -11,10 +11,9 @@ using TaskOrganizer.Models;
 namespace TaskOrganizer.Services;
 
 /// <summary>
-/// Persiste les préférences utilisateur (thème, son) dans un fichier JSON,
-/// séparément de la base SQLite : ce sont des réglages d'application, pas des
-/// données métier. Le chemin est injecté pour rester testable sans toucher au
-/// vrai %LOCALAPPDATA%.
+/// Persists user preferences (theme, sound) to a JSON file, separate from the
+/// SQLite database: these are application settings, not business data. The
+/// path is injected to stay testable without touching the real %LOCALAPPDATA%.
 /// </summary>
 public class ParametresService : IParametresService
 {

@@ -9,6 +9,7 @@ using TaskOrganizer.Models;
 
 namespace TaskOrganizer.Services;
 
+/// <summary>Business logic for task reminders.</summary>
 public class RappelService : IRappelService
 {
     private readonly IRappelRepository _rappelRepository;

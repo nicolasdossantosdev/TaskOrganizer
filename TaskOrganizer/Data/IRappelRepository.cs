@@ -8,6 +8,9 @@ using TaskOrganizer.Models;
 
 namespace TaskOrganizer.Data;
 
+/// <summary>
+/// Data access for task reminders.
+/// </summary>
 public interface IRappelRepository
 {
     /// <summary>Remplace tous les rappels existants d'une tâche par la liste donnée.</summary>

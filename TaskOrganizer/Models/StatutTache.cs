@@ -6,6 +6,7 @@
 
 namespace TaskOrganizer.Models;
 
+/// <summary>Task status values.</summary>
 public enum StatutTache
 {
     ATraiter,

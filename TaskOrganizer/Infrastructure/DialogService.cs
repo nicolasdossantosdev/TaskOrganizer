@@ -12,6 +12,9 @@ using TaskOrganizer.Views;
 
 namespace TaskOrganizer.Infrastructure;
 
+/// <summary>
+/// WPF-backed implementation of <see cref="IDialogService"/> (windows, message boxes, file pickers).
+/// </summary>
 public class DialogService : IDialogService
 {
     private readonly ITacheService _tacheService;

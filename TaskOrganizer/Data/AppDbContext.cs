@@ -9,6 +9,9 @@ using TaskOrganizer.Models;
 
 namespace TaskOrganizer.Data;
 
+/// <summary>
+/// EF Core database context for the SQLite-backed persistence layer.
+/// </summary>
 public class AppDbContext : DbContext
 {
     public AppDbContext(DbContextOptions<AppDbContext> options)

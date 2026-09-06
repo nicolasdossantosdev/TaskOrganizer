@@ -9,10 +9,10 @@ using TaskOrganizer.Models;
 namespace TaskOrganizer.Services;
 
 /// <summary>
-/// Calcule la période (Jour/Semaine/Mois/Aujourd'hui/À venir) et positionne des
-/// tâches déjà chargées sur les jours de cette période. Ne touche pas à la
-/// persistance : les tâches lui sont fournies par l'appelant, qui les obtient
-/// via <see cref="ITacheService"/> comme partout ailleurs dans l'application.
+/// Computes the period (Day/Week/Month/Today/Upcoming) and places already-loaded
+/// tasks onto the days of that period. Does not touch persistence: tasks are
+/// supplied by the caller, which obtains them via <see cref="ITacheService"/>
+/// like everywhere else in the application.
 /// </summary>
 public interface IPlanningService
 {

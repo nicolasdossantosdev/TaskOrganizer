@@ -9,8 +9,8 @@ using TaskOrganizer.Models;
 namespace TaskOrganizer.Services;
 
 /// <summary>
-/// Format d'échange stable pour l'export/import, découplé du schéma EF Core
-/// (évite les cycles Tache&lt;-&gt;Categorie et les colonnes internes type Id).
+/// Stable exchange format for export/import, decoupled from the EF Core schema
+/// (avoids Tache&lt;-&gt;Categorie cycles and internal columns like Id).
 /// </summary>
 public class TacheExportDto
 {

@@ -8,6 +8,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TaskOrganizer.Models;
 
+/// <summary>Task category entity.</summary>
 public class Categorie
 {
     public int Id { get; set; }

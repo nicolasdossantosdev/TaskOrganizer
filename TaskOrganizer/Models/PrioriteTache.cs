@@ -6,6 +6,7 @@
 
 namespace TaskOrganizer.Models;
 
+/// <summary>Task priority levels.</summary>
 public enum PrioriteTache
 {
     Basse,

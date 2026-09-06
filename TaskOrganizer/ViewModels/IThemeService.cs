@@ -9,10 +9,10 @@ using TaskOrganizer.Models;
 namespace TaskOrganizer.ViewModels;
 
 /// <summary>
-/// Applique le thème clair/sombre/système à l'application. Défini ici (comme
-/// <see cref="IDialogService"/>) mais implémenté dans Views car ça manipule du
-/// WPF (<c>Application.ThemeMode</c>) ; garde <see cref="ParametresViewModel"/>
-/// testable sans dépendre de WPF.
+/// Applies the light/dark/system theme to the application. Defined here (like
+/// <see cref="IDialogService"/>) but implemented in Views since it manipulates
+/// WPF (<c>Application.ThemeMode</c>); keeps <see cref="ParametresViewModel"/>
+/// testable without depending on WPF.
 /// </summary>
 public interface IThemeService
 {

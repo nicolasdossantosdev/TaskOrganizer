@@ -14,8 +14,8 @@ using TaskOrganizer.Services;
 namespace TaskOrganizer.ViewModels;
 
 /// <summary>
-/// Champs, validation et logique d'enregistrement partagés entre le formulaire de
-/// création et le formulaire d'édition d'une tâche.
+/// Fields, validation and save logic shared between the task creation form
+/// and the task edit form.
 /// </summary>
 public abstract partial class TacheFormViewModelBase : ObservableValidator
 {
@@ -41,7 +41,7 @@ public abstract partial class TacheFormViewModelBase : ObservableValidator
     [ObservableProperty]
     private StatutTache statut = StatutTache.ATraiter;
 
-    /// <summary>Noms de catégories séparés par des virgules (ex : "Maison, Urgent").</summary>
+    /// <summary>Comma-separated category names (e.g. "Home, Urgent").</summary>
     [ObservableProperty]
     private string? categoriesTexte;
 
@@ -97,10 +97,10 @@ public abstract partial class TacheFormViewModelBase : ObservableValidator
         }
     }
 
-    /// <summary>Crée ou met à jour la tâche à partir des propriétés du formulaire.</summary>
+    /// <summary>Creates or updates the task from the form's properties.</summary>
     protected abstract Task<Tache> PersisterAsync(IReadOnlyList<string> nomsCategories);
 
-    /// <summary>Réinitialise/ferme le formulaire après un enregistrement réussi.</summary>
+    /// <summary>Resets/closes the form after a successful save.</summary>
     protected virtual void ApresEnregistrement()
     {
     }

@@ -6,6 +6,7 @@
 
 namespace TaskOrganizer.Models;
 
+/// <summary>Scheduled reminder for a task.</summary>
 public class Rappel
 {
     public int Id { get; set; }

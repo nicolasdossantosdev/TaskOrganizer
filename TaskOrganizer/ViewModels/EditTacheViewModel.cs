@@ -9,6 +9,7 @@ using TaskOrganizer.Services;
 
 namespace TaskOrganizer.ViewModels;
 
+/// <summary>Task edit form ViewModel — the Update half of <see cref="TacheFormViewModelBase"/>.</summary>
 public partial class EditTacheViewModel : TacheFormViewModelBase
 {
     private readonly ITacheService _tacheService;

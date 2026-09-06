@@ -12,9 +12,9 @@ using TaskOrganizer.Models;
 namespace TaskOrganizer.Services;
 
 /// <summary>
-/// Réutilise ITacheService/ICategorieService pour lire/écrire les tâches
-/// (aucun accès direct à Data) : l'export/import est une orchestration
-/// applicative, pas une nouvelle source de vérité pour la persistance.
+/// Reuses ITacheService/ICategorieService to read/write tasks (no direct
+/// access to Data): export/import is an application-level orchestration,
+/// not a new source of truth for persistence.
 /// </summary>
 public class ExportImportService : IExportImportService
 {

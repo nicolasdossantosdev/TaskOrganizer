@@ -6,7 +6,7 @@
 
 namespace TaskOrganizer.Models;
 
-/// <summary>Décalage d'un rappel par rapport à l'échéance de la tâche.</summary>
+/// <summary>Offset of a reminder relative to the task's due date.</summary>
 public enum OffsetRappel
 {
     UneHeureAvant,

@@ -15,10 +15,10 @@ using TaskOrganizer.Services;
 namespace TaskOrganizer.ViewModels;
 
 /// <summary>
-/// Vue Planning (Jour/Semaine/Mois/Aujourd'hui/À venir). Réutilise
-/// <see cref="ITacheService"/> pour le chargement/la mise à jour des tâches
-/// (aucune requête de persistance propre) et <see cref="IPlanningService"/>
-/// pour le calcul, purement en mémoire, des jours et de leur contenu.
+/// Planning view (Day/Week/Month/Today/Upcoming). Reuses
+/// <see cref="ITacheService"/> to load/update tasks (no persistence query of
+/// its own) and <see cref="IPlanningService"/> for the purely in-memory
+/// calculation of days and their content.
 /// </summary>
 public partial class PlanningViewModel : ObservableObject
 {
@@ -47,7 +47,7 @@ public partial class PlanningViewModel : ObservableObject
 
     public bool PeutNaviguer => ModeActuel is not (ModePlanning.Aujourdhui or ModePlanning.AVenir);
 
-    /// <summary>Levé après une replanification persistée avec succès, pour que la vue Liste se resynchronise.</summary>
+    /// <summary>Raised after a successfully persisted reschedule, so the List view resynchronizes.</summary>
     public event EventHandler? TacheReplanifiee;
 
     public PlanningViewModel(ITacheService tacheService, IPlanningService planningService, IDialogService dialogService)

@@ -6,6 +6,7 @@
 
 namespace TaskOrganizer.Models;
 
+/// <summary>Display modes for the planning view.</summary>
 public enum ModePlanning
 {
     Jour,

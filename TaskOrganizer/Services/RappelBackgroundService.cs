@@ -9,10 +9,9 @@ using Microsoft.Extensions.Hosting;
 namespace TaskOrganizer.Services;
 
 /// <summary>
-/// Scrute périodiquement les rappels dus et déclenche une notification toast
-/// pour chacun. Démarré/arrêté manuellement depuis App.xaml.cs (composition
-/// root) plutôt que via le générique .NET Host, pour rester simple dans une
-/// application WPF classique.
+/// Periodically polls for due reminders and fires a toast notification for
+/// each one. Started/stopped manually from App.xaml.cs (composition root)
+/// rather than via the generic .NET Host, to stay simple in a plain WPF app.
 /// </summary>
 public class RappelBackgroundService : BackgroundService
 {

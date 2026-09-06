@@ -13,8 +13,8 @@ using TaskOrganizer.ViewModels;
 namespace TaskOrganizer.Views;
 
 /// <summary>
-/// Code-behind limité au câblage du drag & drop (extraction de la tâche
-/// déplacée et du jour cible), la replanification elle-même est déléguée à
+/// Code-behind limited to wiring up drag & drop (extracting the dragged task
+/// and the target day); the actual rescheduling is delegated to
 /// <see cref="PlanningViewModel.ReplanifierCommand"/>.
 /// </summary>
 public partial class PlanningView : UserControl

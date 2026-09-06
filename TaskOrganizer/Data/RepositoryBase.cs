@@ -10,11 +10,9 @@ using Microsoft.EntityFrameworkCore;
 namespace TaskOrganizer.Data;
 
 /// <summary>
-/// Fournit à tous les repositories une création de <see cref="AppDbContext"/> par
-/// opération (voir <see cref="TacheRepository"/>) ainsi qu'une gestion commune des
-/// erreurs SQLite : nouvelle tentative sur verrouillage transitoire (SQLITE_BUSY /
-/// SQLITE_LOCKED), et remontée d'une <see cref="PersistanceException"/> au message
-/// utilisateur clair pour toute autre erreur d'accès aux données.
+/// Shared base for repositories: per-operation <see cref="AppDbContext"/>
+/// creation plus common SQLite error handling (retry on transient locks,
+/// <see cref="PersistanceException"/> for everything else).
 /// </summary>
 public abstract class RepositoryBase
 {

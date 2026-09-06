@@ -8,6 +8,9 @@ using TaskOrganizer.Models;
 
 namespace TaskOrganizer.Data;
 
+/// <summary>
+/// Data access for tasks.
+/// </summary>
 public interface ITacheRepository
 {
     Task<IReadOnlyList<Tache>> GetAllAsync(CancellationToken cancellationToken = default);

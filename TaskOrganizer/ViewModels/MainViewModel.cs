@@ -15,6 +15,7 @@ using TaskOrganizer.Services;
 
 namespace TaskOrganizer.ViewModels;
 
+/// <summary>Main window ViewModel: task list with search, sort, filter and inline status changes.</summary>
 public partial class MainViewModel : ObservableObject
 {
     private readonly ITacheService _tacheService; 

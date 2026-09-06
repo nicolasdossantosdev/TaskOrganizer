@@ -9,6 +9,7 @@ using TaskOrganizer.ViewModels;
 
 namespace TaskOrganizer.Views;
 
+/// <summary>Modal window hosting the task edit form.</summary>
 public partial class EditTacheWindow : Window
 {
     public EditTacheWindow(EditTacheViewModel viewModel)

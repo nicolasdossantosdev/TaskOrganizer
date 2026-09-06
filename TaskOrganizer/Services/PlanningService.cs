@@ -8,6 +8,7 @@ using TaskOrganizer.Models;
 
 namespace TaskOrganizer.Services;
 
+/// <summary>Pure calculation implementation of <see cref="IPlanningService"/>.</summary>
 public class PlanningService : IPlanningService
 {
     public (DateTime Debut, DateTime Fin) ObtenirPeriode(ModePlanning mode, DateTime dateReference)
@@ -49,7 +50,7 @@ public class PlanningService : IPlanningService
         return jours;
     }
 
-    /// <summary>Semaine ISO (lundi -> dimanche).</summary>
+    /// <summary>ISO week (Monday -> Sunday).</summary>
     private static (DateTime Debut, DateTime Fin) ObtenirSemaine(DateTime date)
     {
         var decalage = ((int)date.DayOfWeek - (int)DayOfWeek.Monday + 7) % 7;
@@ -57,7 +58,7 @@ public class PlanningService : IPlanningService
         return (lundi, lundi.AddDays(6));
     }
 
-    /// <summary>Mois complet, étendu aux semaines entières (pour un affichage en grille sans trou).</summary>
+    /// <summary>Full month, extended to whole weeks (for a gap-free grid display).</summary>
     private static (DateTime Debut, DateTime Fin) ObtenirMoisEtendu(DateTime date)
     {
         var premierDuMois = new DateTime(date.Year, date.Month, 1);

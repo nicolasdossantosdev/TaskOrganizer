@@ -10,6 +10,9 @@ using TaskOrganizer.Models;
 
 namespace TaskOrganizer.Data.Configurations;
 
+/// <summary>
+/// EF Core mapping for <see cref="Rappel"/>.
+/// </summary>
 public class RappelConfiguration : IEntityTypeConfiguration<Rappel>
 {
     public void Configure(EntityTypeBuilder<Rappel> builder)

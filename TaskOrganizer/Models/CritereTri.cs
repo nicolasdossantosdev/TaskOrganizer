@@ -6,6 +6,7 @@
 
 namespace TaskOrganizer.Models;
 
+/// <summary>Sort criteria for the task list.</summary>
 public enum CritereTri
 {
     DateEcheance,

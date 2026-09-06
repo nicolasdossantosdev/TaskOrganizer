@@ -12,6 +12,7 @@ using TaskOrganizer.Services;
 
 namespace TaskOrganizer.ViewModels;
 
+/// <summary>Settings tab ViewModel: theme, notification sound, export/import.</summary>
 public partial class ParametresViewModel : ObservableObject
 {
     private readonly IParametresService _parametresService;
@@ -28,7 +29,7 @@ public partial class ParametresViewModel : ObservableObject
     [ObservableProperty]
     private bool sonNotificationsActif;
 
-    /// <summary>Levé après un import réussi, pour que les listes/le planning se rechargent.</summary>
+    /// <summary>Raised after a successful import, so the list/planning views reload.</summary>
     public event EventHandler? DonneesImportees;
 
     public ParametresViewModel(
@@ -119,8 +120,8 @@ public partial class ParametresViewModel : ObservableObject
     }
 
     /// <summary>
-    /// Évite d'écrire sur disque pendant le remplissage initial des propriétés
-    /// dans le constructeur (chaque affectation déclenche le partial OnXChanged).
+    /// Avoids writing to disk during the initial property fill-in in the
+    /// constructor (each assignment triggers the partial OnXChanged).
     /// </summary>
     private void EnregistrerSiPret()
     {

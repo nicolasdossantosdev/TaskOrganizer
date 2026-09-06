@@ -9,6 +9,7 @@ using TaskOrganizer.Models;
 
 namespace TaskOrganizer.Services;
 
+/// <summary>Business logic for tasks.</summary>
 public class TacheService : ITacheService
 {
     private readonly ITacheRepository _tacheRepository;

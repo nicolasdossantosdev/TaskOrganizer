@@ -19,9 +19,7 @@ using TaskOrganizer.Views;
 
 namespace TaskOrganizer;
 
-/// <summary>
-/// Interaction logic for App.xaml
-/// </summary>
+/// <summary>Composition root: builds the DI container and drives startup/shutdown.</summary>
 public partial class App : Application
 {
     private ServiceProvider? _serviceProvider;

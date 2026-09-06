@@ -8,6 +8,7 @@ using System.Windows.Controls;
 
 namespace TaskOrganizer.Views;
 
+/// <summary>Settings tab view (code-behind, no business logic).</summary>
 public partial class ParametresView : UserControl
 {
     public ParametresView()

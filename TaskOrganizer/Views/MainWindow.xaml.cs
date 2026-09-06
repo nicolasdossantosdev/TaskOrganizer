@@ -12,6 +12,7 @@ using TaskOrganizer.ViewModels;
 
 namespace TaskOrganizer.Views;
 
+/// <summary>Application main window: task list, Planning and Settings tabs.</summary>
 public partial class MainWindow : Window
 {
     public MainWindow(MainViewModel viewModel)
@@ -21,10 +22,10 @@ public partial class MainWindow : Window
     }
 
     /// <summary>
-    /// SelectionChanged remonte (bubbling) depuis n'importe quel Selector des
-    /// onglets (ComboBox de tri, de thème, etc.) : on ne réagit qu'à un
-    /// changement d'onglet, identifié par e.Source pointant sur le TabControl
-    /// lui-même plutôt que sur un contrôle imbriqué.
+    /// SelectionChanged bubbles up from any Selector inside the tabs (sort
+    /// ComboBox, theme ComboBox, etc.): only react to an actual tab change,
+    /// identified by e.Source pointing at the TabControl itself rather than a
+    /// nested control.
     /// </summary>
     private void OngletsPrincipaux_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
@@ -37,9 +38,9 @@ public partial class MainWindow : Window
     }
 
     /// <summary>
-    /// Le SelectedItem de la ComboBox est déjà écrit dans Tache.Statut (binding
-    /// TwoWay) au moment où cet événement se déclenche ; il ne reste qu'à
-    /// persister la tâche via la commande du ViewModel.
+    /// The ComboBox's SelectedItem is already written to Tache.Statut (TwoWay
+    /// binding) by the time this event fires; all that's left is to persist
+    /// the task via the ViewModel's command.
     /// </summary>
     private void StatutComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {

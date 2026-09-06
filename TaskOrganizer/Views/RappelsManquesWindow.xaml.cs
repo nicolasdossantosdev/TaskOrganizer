@@ -9,6 +9,7 @@ using TaskOrganizer.Models;
 
 namespace TaskOrganizer.Views;
 
+/// <summary>Modal window listing reminders missed while the app was closed.</summary>
 public partial class RappelsManquesWindow : Window
 {
     public RappelsManquesWindow(IReadOnlyList<Rappel> rappelsManques)

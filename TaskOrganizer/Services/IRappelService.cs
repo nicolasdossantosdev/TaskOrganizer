@@ -8,11 +8,12 @@ using TaskOrganizer.Models;
 
 namespace TaskOrganizer.Services;
 
+/// <summary>Business logic for task reminders.</summary>
 public interface IRappelService
 {
     /// <summary>
-    /// Remplace les rappels d'une tâche par un rappel pour chacun des offsets
-    /// donnés, calculé à partir de l'échéance fournie.
+    /// Replaces a task's reminders with one reminder per given offset,
+    /// computed from the supplied due date.
     /// </summary>
     Task DefinirRappelsAsync(
         int tacheId,

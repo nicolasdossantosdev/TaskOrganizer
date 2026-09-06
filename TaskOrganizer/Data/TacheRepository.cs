@@ -9,6 +9,9 @@ using TaskOrganizer.Models;
 
 namespace TaskOrganizer.Data;
 
+/// <summary>
+/// EF Core-backed implementation of <see cref="ITacheRepository"/>.
+/// </summary>
 public class TacheRepository : RepositoryBase, ITacheRepository
 {
     public TacheRepository(IDbContextFactory<AppDbContext> contextFactory)

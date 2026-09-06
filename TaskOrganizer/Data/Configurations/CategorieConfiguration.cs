@@ -10,6 +10,9 @@ using TaskOrganizer.Models;
 
 namespace TaskOrganizer.Data.Configurations;
 
+/// <summary>
+/// EF Core mapping for <see cref="Categorie"/>.
+/// </summary>
 public class CategorieConfiguration : IEntityTypeConfiguration<Categorie>
 {
     public void Configure(EntityTypeBuilder<Categorie> builder)

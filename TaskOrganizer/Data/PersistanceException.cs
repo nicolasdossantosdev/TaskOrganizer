@@ -7,8 +7,8 @@
 namespace TaskOrganizer.Data;
 
 /// <summary>
-/// Erreur d'accès aux données destinée à être affichée à l'utilisateur
-/// (message déjà formulé en langage clair, sans détail technique EF Core/SQLite).
+/// Data access error meant to be shown to the user (message already in
+/// plain language, without EF Core/SQLite technical detail).
 /// </summary>
 public class PersistanceException : Exception
 {
